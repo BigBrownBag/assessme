@@ -1,11 +1,14 @@
 import React from "react";
+import LayoutPage from "../LayoutPage";
 
 const withLayout = (WrappedComponent: any) => {
     class WithLayout extends React.Component {
 
         render() {
             return (
-                <WrappedComponent />
+                <LayoutPage>
+                    <WrappedComponent />
+                </LayoutPage>
             );
         }
     }

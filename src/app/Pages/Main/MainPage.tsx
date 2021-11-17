@@ -1,6 +1,6 @@
 import React from 'react';
 import {makeStyles} from "@material-ui/core";
-import withLayout from "../HOC/withLayout";
+import withLayout from "../../HOC/withLayout";
 
 const useStyles = makeStyles(theme => ({
     root: {},
@@ -13,7 +13,7 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
 
     return (
         <div className={classes.root}>
-            
+
         </div>
     )
 }
