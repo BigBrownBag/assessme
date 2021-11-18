@@ -1,5 +1,5 @@
 import React from 'react';
-import {Drawer, List, ListItem, Typography} from '@material-ui/core';
+import {Avatar, Drawer, List, ListItem, Typography} from '@material-ui/core';
 import {makeStyles} from "@material-ui/core";
 import {Link} from 'react-router-dom';
 import clsx from 'clsx';
@@ -21,7 +21,16 @@ const useStyles = makeStyles((theme) => ({
         color: '#FFF'
     },
     avatarWrapper: {
-        height: 140
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        height: 200,
+        width: '100%'
+    },
+    avatar: {
+        width: 98,
+        height: 98
     },
     icon: {
         color: 'rgba(0, 0, 0, 0.54)'
@@ -40,6 +49,11 @@ const useStyles = makeStyles((theme) => ({
                 color: '#2196F3'
             }
         }
+    },
+    avatarTitle: {
+        marginTop: 12,
+        fontWeight: 500,
+        fontSize: 16
     }
 }))
 
@@ -64,7 +78,7 @@ const links: link[] = [
     {
         title: 'Поиск',
         icon: 'search',
-        to: '/',
+        to: '/search',
         admin: false
     },
     {
@@ -110,7 +124,9 @@ const Navbar: React.FC<NavbarProps> = (props: NavbarProps) => {
                 </div>
 
                 <div className={classes.avatarWrapper}>
+                    <Avatar alt="Remy Sharp" src="https://v4.mui.com/static/images/avatar/2.jpg" className={classes.avatar}/>
 
+                    <Typography className={classes.avatarTitle}>Иванов Иван</Typography>
                 </div>
 
                 <List>

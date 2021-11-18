@@ -20,7 +20,7 @@ export const LayoutPage: React.FC<LayoutPageProps> = ({children, ...otherProps})
     return (
         <div className={classes.root}>
             <Navbar
-                user={{}}
+                user={{admin: true}}
             />
 
             <main className={classes.main}>
