@@ -1,6 +1,7 @@
 import React from 'react';
 import {makeStyles, Typography} from "@material-ui/core";
 import StarsIcon from '@material-ui/icons/Stars';
+import clsx from "clsx";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -20,13 +21,14 @@ const useStyles = makeStyles(theme => ({
 
 interface ShowRatingProps {
     value: number;
+    className?: string | object;
 }
 
 const ShowRating: React.FC<ShowRatingProps> = (props: ShowRatingProps) => {
     const classes = useStyles()
 
     return (
-        <div className={classes.root}>
+        <div className={clsx(classes.root, props.className)}>
             <Typography className={classes.value}>{props.value.toString().replace('.', ',')}</Typography>
             <StarsIcon className={classes.icon}/>
         </div>

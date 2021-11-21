@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import withLayout from "../../HOC/withLayout";
 import {Avatar, IconButton, InputAdornment, List, ListItem, makeStyles, Typography} from "@material-ui/core";
 import CustomInput from "../../components/CustomInput";
 import SearchIcon from '@material-ui/icons/Search';
 import CloseIcon from '@material-ui/icons/Close';
 import ShowRating from "../../components/ShowRating";
+import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -42,6 +43,7 @@ const useStyles = makeStyles(theme => ({
         },
         '&:hover': {
             background: 'rgba(33, 150, 243, 0.34)',
+            cursor: 'pointer'
         }
     },
     avatarWrapp: {
@@ -82,95 +84,124 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-const SearchPage = () => {
-    const classes = useStyles()
+interface SearchData {
+    name: string;
+    surname:string;
+    role: string;
+    rating: string;
+    avatar: string;
+}
 
-    const testData = [
-        {
-            name: 'Mark',
-            surname: 'Out',
-            role: 'Преподаватель',
-            rating: '5.5',
-            avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-        },
-        {
-            name: 'Boss',
-            surname: 'Out',
-            role: 'Преподаватель',
-            rating: '5.9',
-            avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-        },
-        {
-            name: 'Flesh',
-            surname: 'Out',
-            role: 'Преподаватель',
-            rating: '5.1',
-            avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-        },
-        {
-            name: 'Mark',
-            surname: 'Out',
-            role: 'Преподаватель',
-            rating: '5.5',
-            avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-        },
-        {
-            name: 'Boss',
-            surname: 'Out',
-            role: 'Преподаватель',
-            rating: '5.9',
-            avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-        },
-        {
-            name: 'Flesh',
-            surname: 'Out',
-            role: 'Преподаватель',
-            rating: '5.1',
-            avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-        },
-        {
-            name: 'Mark',
-            surname: 'Out',
-            role: 'Преподаватель',
-            rating: '5.5',
-            avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-        },
-        {
-            name: 'Boss',
-            surname: 'Out',
-            role: 'Преподаватель',
-            rating: '5.9',
-            avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-        },
-        {
-            name: 'Flesh',
-            surname: 'Out',
-            role: 'Преподаватель',
-            rating: '5.1',
-            avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-        },
-        {
-            name: 'Mark',
-            surname: 'Out',
-            role: 'Преподаватель',
-            rating: '5.5',
-            avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-        },
-        {
-            name: 'Boss',
-            surname: 'Out',
-            role: 'Преподаватель',
-            rating: '5.9',
-            avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-        },
-        {
-            name: 'Flesh',
-            surname: 'Out',
-            role: 'Преподаватель',
-            rating: '5.1',
-            avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-        },
-    ]
+const testData: SearchData[] = [
+    {
+        name: 'Mark',
+        surname: 'Out',
+        role: 'Преподаватель',
+        rating: '5.5',
+        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
+    },
+    {
+        name: 'Boss',
+        surname: 'Out',
+        role: 'Преподаватель',
+        rating: '5.9',
+        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
+    },
+    {
+        name: 'Flesh',
+        surname: 'Out',
+        role: 'Преподаватель',
+        rating: '5.1',
+        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
+    },
+    {
+        name: 'Mark',
+        surname: 'Out',
+        role: 'Преподаватель',
+        rating: '5.5',
+        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
+    },
+    {
+        name: 'Boss',
+        surname: 'Out',
+        role: 'Преподаватель',
+        rating: '5.9',
+        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
+    },
+    {
+        name: 'Flesh',
+        surname: 'Out',
+        role: 'Преподаватель',
+        rating: '5.1',
+        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
+    },
+    {
+        name: 'Mark',
+        surname: 'Out',
+        role: 'Преподаватель',
+        rating: '5.5',
+        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
+    },
+    {
+        name: 'Boss',
+        surname: 'Out',
+        role: 'Преподаватель',
+        rating: '5.9',
+        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
+    },
+    {
+        name: 'Flesh',
+        surname: 'Out',
+        role: 'Преподаватель',
+        rating: '5.1',
+        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
+    },
+    {
+        name: 'Mark',
+        surname: 'Out',
+        role: 'Преподаватель',
+        rating: '5.5',
+        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
+    },
+    {
+        name: 'Boss',
+        surname: 'Out',
+        role: 'Преподаватель',
+        rating: '5.9',
+        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
+    },
+    {
+        name: 'Flesh',
+        surname: 'Out',
+        role: 'Преподаватель',
+        rating: '5.1',
+        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
+    },
+]
+
+const SearchPage: React.FC<any> = () => {
+    const classes = useStyles()
+    const history = useHistory()
+    const [data, setData] = useState<SearchData[]>(testData)
+    const [searchTerm, setSearchTerm] = useState<string>('')
+
+    const handleSearch = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const value = event.target.value
+        if (value) {
+            setSearchTerm(value)
+            setData(testData.filter(item =>
+                `${item.name} ${item.surname} ${item.role}`.toLowerCase().includes(value.toLowerCase())
+            ))
+        } else {
+            setSearchTerm('')
+            setData(testData)
+        }
+    }
+
+    const handleReset = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setSearchTerm('')
+        setData(testData)
+    }
 
     return (
         <div  className={classes.root}>
@@ -179,6 +210,8 @@ const SearchPage = () => {
                     <div className={classes.header}>
                         <CustomInput
                             fullWidth
+                            value={searchTerm}
+                            onChange={handleSearch}
                             InputProps={{
                                 startAdornment:
                                     <InputAdornment position="start">
@@ -187,7 +220,7 @@ const SearchPage = () => {
                                 endAdornment:
                                     <InputAdornment position="end">
                                         <IconButton
-                                            onClick={() => {}}
+                                            onClick={handleReset}
                                         >
                                             <CloseIcon className={classes.inputIcon} fontSize="large"/>
                                         </IconButton>
@@ -198,8 +231,12 @@ const SearchPage = () => {
                 </div>
                 <div className={classes.body}>
                     <List className={classes.rowList}>
-                        {testData.map((item, idx) => (
-                            <ListItem className={classes.rowData} onClick={() => {console.log(1)}}>
+                        {data.map((item, idx) => (
+                            <ListItem
+                                className={classes.rowData}
+                                onClick={(event) => history.push('/profile/1')}
+                                key={idx}
+                            >
                                 <div className={classes.avatarWrapp}>
                                     <Avatar alt={`${item.name} ${item.surname}`} src={item.avatar} className={classes.avatar}/>
                                 </div>

@@ -5,14 +5,15 @@ const useStyles = makeStyles(theme => ({
     root: {
         height: 45,
         width: '100%',
-        background: '#2196F3',
+        background: '#FFF',
         position: 'fixed',
         bottom: 0,
         display: 'flex',
-        justifyContent: 'right'
+        justifyContent: 'right',
+        borderTop: '2px solid #2196F3'
     },
     logoWrapper: {
-        background: '#2196F3',
+        background: '#FFF',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -21,7 +22,7 @@ const useStyles = makeStyles(theme => ({
     logo: {
         fontSize: 48,
         fontFamily: '"Reenie Beanie"',
-        color: '#FFF'
+        color: '#2196F3'
     },
 }))
 

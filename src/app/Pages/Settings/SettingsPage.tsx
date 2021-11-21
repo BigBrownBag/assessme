@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
-import {Avatar, Button, List, ListItem, makeStyles, TextField, Typography} from "@material-ui/core";
+import {Avatar, Button, List, ListItem, makeStyles, Typography} from "@material-ui/core";
 import withLayout from "../../HOC/withLayout";
 import CustomButton from "../../components/CustomButton";
+import CustomTextField from "../../components/CustomTextField";
+import confirmValue from "../../../utils/confirmValue";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -81,43 +83,130 @@ const useStyles = makeStyles(theme => ({
     },
     btn: {
         marginRight: '16px !important'
-    }
+    },
+    input: {
+        display: "none",
+    },
 }))
 
 export interface SettingsPageProps {}
 
-type field = { field: string, fieldProperty: string }
+export interface Field {
+    field: string,
+    fieldProperty: keyof Form,
+    editable?: boolean,
+    type?: 'text' | 'email' | 'password'
+}
 
-const fields: field[] = [
+export interface Form {
+    name: string;
+    surname: string;
+    login: string;
+    password: string;
+    passwordRepeat?: string;
+    email: string;
+    role: string;
+    organization: string;
+    permissions: string;
+    avatar?: File | null;
+}
+
+const fields: Field[] = [
     {
         field: 'Имя',
-        fieldProperty: 'name'
+        fieldProperty: 'name',
+        editable: true,
+        type: 'text'
     },
     {
         field: 'Фамилия',
-        fieldProperty: 'surname'
+        fieldProperty: 'surname',
+        editable: true,
+        type: 'text'
+    },
+    {
+        field: 'Логин',
+        fieldProperty: 'login',
+        editable: true,
+        type: 'text'
+    },
+    {
+        field: 'Пароль',
+        fieldProperty: 'password',
+        editable: true,
+        type: 'password'
+    },
+    {
+        field: 'Повторите пароль',
+        fieldProperty: 'passwordRepeat',
+        editable: true,
+        type: 'password'
     },
     {
         field: 'Email',
-        fieldProperty: 'email'
+        fieldProperty: 'email',
+        editable: true,
+        type: 'email'
     },
     {
         field: 'Роль',
-        fieldProperty: 'role'
+        fieldProperty: 'role',
+        editable: true,
+        type: 'text'
     },
     {
         field: 'Организация',
-        fieldProperty: 'organization'
+        fieldProperty: 'organization',
+        editable: true,
+        type: 'text'
     },
     {
         field: 'Разрешeния',
-        fieldProperty: 'permissions'
+        fieldProperty: 'permissions',
+        editable: false,
+        type: 'text'
     }
 ]
+
+const defaultForm: Form = {
+    name: '',
+    surname: '',
+    login: '',
+    password: '',
+    passwordRepeat: '',
+    email: '',
+    role: '',
+    organization: '',
+    permissions: '',
+    avatar: null
+}
 
 export const SettingsPage: React.FC<SettingsPageProps> = (props: SettingsPageProps) => {
     const classes = useStyles()
     const [editMode, setEditMode] = useState<boolean>(false)
+    const [form, setForm] = useState<Form>(defaultForm)
+
+    const handleRemove = () => {
+        setForm({...form, avatar: null})
+    }
+
+    const handleSave = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const newAvatar: File = event.target.files![0]
+        const fileTypes = [
+            "image/gif",
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+            "image/svg+xml",
+        ];
+        if (newAvatar.size < 20 * 1024 * 1024 && fileTypes.includes(newAvatar.type)) {
+            setForm({...form, avatar: newAvatar})
+        }
+    }
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+    }
 
     const testUser: any = {
         name: 'Иван',
@@ -125,7 +214,10 @@ export const SettingsPage: React.FC<SettingsPageProps> = (props: SettingsPagePro
         surname: 'Иванов',
         organization: 'Уральский федеральный университет имени первого Президента России Б. Н. Ельцина',
         email: 'IvanovUrfu@ivan.me',
-        permissions: 'пользователь',
+        permissions: 'Все',
+        login: 'Ivan123',
+        password: '1234',
+        rating: 5.5
     }
 
     return (
@@ -134,29 +226,55 @@ export const SettingsPage: React.FC<SettingsPageProps> = (props: SettingsPagePro
                 <div className={classes.header}><Typography className={classes.name}>Настройки</Typography></div>
                 <div className={classes.body}>
                     <div className={classes.avatarWrapper}>
-                        <Avatar alt="Remy Sharp" src="https://v4.mui.com/static/images/avatar/2.jpg" className={classes.avatar}/>
-                        <Button
-                            className={classes.photoBtn}
-                            disableRipple
-                        >
-                            Изменить фото
-                        </Button>
+                        <Avatar alt={`${testUser.name} ${testUser.surname}`} src="https://v4.mui.com/static/images/avatar/2.jpg" className={classes.avatar}/>
+                        {form.avatar ?
+                            <Button
+                                className={classes.photoBtn}
+                                component='span'
+                                disableRipple
+                                variant="outlined"
+                                onClick={handleRemove}
+                            >
+                                Отменить
+                            </Button>
+                            :
+                            <>
+                                <input accept="image/*" hidden id="icon-button-file" type="file" onChange={handleSave}/>
+                                <label htmlFor="icon-button-file">
+                                    <Button
+                                        className={classes.photoBtn}
+                                        component='span'
+                                        disableRipple
+                                    >
+                                        Изменить фото
+                                    </Button>
+                                </label>
+                            </>
+                        }
                     </div>
-
-                    <List className={classes.fieldList}>
-                        {fields.map((item, idx) => (
-                            <ListItem className={classes.field}>
-                                <Typography className={classes.filedTitle}>{item.field}</Typography>
-                                {editMode ?
-                                    <TextField
-                                        fullWidth
-                                    />
-                                    :
-                                    <Typography className={classes.fieldDesc}>{testUser[item.fieldProperty]}</Typography>
-                                }
-                            </ListItem>
-                        ))}
-                    </List>
+                    <form onSubmit={handleSubmit}>
+                        <List className={classes.fieldList}>
+                            {fields.map((item, idx) => (
+                                !(!editMode && item.type === 'password') && <ListItem className={classes.field} key={idx}>
+                                    <Typography className={classes.filedTitle}>{item.field}</Typography>
+                                    {editMode && item.editable ?
+                                        <CustomTextField
+                                            error={
+                                                confirmValue(form[item.fieldProperty]!, item.type!)
+                                            }
+                                            helperText={confirmValue(form[item.fieldProperty]!, item.type!) ? 'Empty field!' : ' '} //TODO
+                                            type={item.type}
+                                            placeholder={testUser[item.fieldProperty]}
+                                            value={form[item.fieldProperty]}
+                                            onChange={event => setForm({...form, [item.fieldProperty]: event.target.value})}
+                                        />
+                                        :
+                                        <Typography className={classes.fieldDesc}>{testUser[item.fieldProperty]}</Typography>
+                                    }
+                                </ListItem>
+                            ))}
+                        </List>
+                    </form>
                 </div>
 
                 <div className={classes.btnGroup}>
@@ -166,14 +284,16 @@ export const SettingsPage: React.FC<SettingsPageProps> = (props: SettingsPagePro
                                 <CustomButton
                                     className={classes.btn}
                                     onClick={(event) => {
-                                        setEditMode(false);
+                                        setEditMode(false)
+                                        setForm(defaultForm)
                                     }}
                                 >
                                     Отменить
                                 </CustomButton>
                                 <CustomButton
                                     onClick={(event) => {
-                                        setEditMode(false);
+                                        setEditMode(false)
+                                        setForm(defaultForm)
                                     }}
                                 >
                                     Сохранить

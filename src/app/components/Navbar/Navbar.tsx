@@ -81,24 +81,24 @@ const links: link[] = [
         to: '/search',
         admin: false
     },
-    {
-        title: 'Изменить критерии',
-        icon: 'event_note',
-        to: '/',
-        admin: true
-    },
+    // {
+    //     title: 'Изменить критерии',
+    //     icon: 'event_note',
+    //     to: '/',
+    //     admin: true
+    // },
     {
         title: 'Настройки',
         icon: 'settings',
         to: '/settings',
         admin: false
     },
-    {
-        title: 'Уведомления',
-        icon: 'notifications',
-        to: '/',
-        admin: false
-    },
+    // {
+    //     title: 'Уведомления',
+    //     icon: 'notifications',
+    //     to: '/',
+    //     admin: false
+    // },
     {
         title: 'Выйти',
         icon: 'logout',
