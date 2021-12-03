@@ -67,7 +67,7 @@ const useStyles = makeStyles(theme => ({
     },
     avatar: {
         width: 98,
-        height: 98
+        height: 98,
     },
     infoName: {
         fontWight: 500,
