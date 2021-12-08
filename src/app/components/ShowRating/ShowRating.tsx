@@ -11,17 +11,26 @@ const useStyles = makeStyles(theme => ({
     value: {
         marginRight: 16,
         color: 'rgba(0, 0, 0, 0.87)',
-        fontSize: 32
+        fontSize: 32,
+        '&$small': {
+            fontSize: 18,
+            marginRight: 8
+        }
     },
     icon: {
         fontSize: 38,
-        color: 'rgba(33, 150, 243, 1)'
-    }
+        color: 'rgba(33, 150, 243, 1)',
+        '&$small': {
+            fontSize: 21
+        }
+    },
+    small: {}
 }))
 
 interface ShowRatingProps {
     value: number;
     className?: string | object;
+    size?: "normal" | "small";
 }
 
 const ShowRating: React.FC<ShowRatingProps> = (props: ShowRatingProps) => {
@@ -29,8 +38,10 @@ const ShowRating: React.FC<ShowRatingProps> = (props: ShowRatingProps) => {
 
     return (
         <div className={clsx(classes.root, props.className)}>
-            <Typography className={classes.value}>{props.value.toString().replace('.', ',')}</Typography>
-            <StarsIcon className={classes.icon}/>
+            <Typography className={clsx(classes.value, {[classes.small]: props.size === "small"})}>
+                {props.value.toString().replace('.', ',')}
+            </Typography>
+            <StarsIcon className={clsx(classes.icon, {[classes.small]: props.size === "small"})}/>
         </div>
     )
 }

@@ -4,6 +4,8 @@ import withLayout from "../../HOC/withLayout";
 import CustomButton from "../../components/CustomButton";
 import CustomTextField from "../../components/CustomTextField";
 import confirmValue from "../../../utils/confirmValue";
+import {Form} from "../../../utils/interface";
+import {useProfileData} from "../Profile/effects/use-profile-data.effect";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -98,23 +100,10 @@ export interface Field {
     type?: 'text' | 'email' | 'password'
 }
 
-export interface Form {
-    name: string;
-    surname: string;
-    login: string;
-    password: string;
-    passwordRepeat?: string;
-    email: string;
-    role: string;
-    organization: string;
-    permissions: string;
-    avatar?: File | null;
-}
-
 const fields: Field[] = [
     {
         field: 'Имя',
-        fieldProperty: 'name',
+        fieldProperty: 'firstname',
         editable: true,
         type: 'text'
     },
@@ -126,7 +115,7 @@ const fields: Field[] = [
     },
     {
         field: 'Логин',
-        fieldProperty: 'login',
+        fieldProperty: 'username',
         editable: true,
         type: 'text'
     },
@@ -150,35 +139,31 @@ const fields: Field[] = [
     },
     {
         field: 'Роль',
-        fieldProperty: 'role',
+        fieldProperty: 'org_status',
         editable: true,
         type: 'text'
     },
     {
         field: 'Организация',
-        fieldProperty: 'organization',
+        fieldProperty: 'org',
         editable: true,
-        type: 'text'
-    },
-    {
-        field: 'Разрешeния',
-        fieldProperty: 'permissions',
-        editable: false,
         type: 'text'
     }
 ]
 
 const defaultForm: Form = {
-    name: '',
-    surname: '',
-    login: '',
+    avatar_url: null,
+    email: '',
+    firstname: '',
+    id: null,
+    org: null,
     password: '',
     passwordRepeat: '',
-    email: '',
-    role: '',
-    organization: '',
-    permissions: '',
-    avatar: null
+    org_status: '',
+    over_score: null,
+    scores_count: '',
+    surname: '',
+    username: ''
 }
 
 export const SettingsPage: React.FC<SettingsPageProps> = (props: SettingsPageProps) => {
@@ -187,7 +172,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = (props: SettingsPagePro
     const [form, setForm] = useState<Form>(defaultForm)
 
     const handleRemove = () => {
-        setForm({...form, avatar: null})
+        setForm({...form, avatar_url: null})
     }
 
     const handleSave = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -200,7 +185,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = (props: SettingsPagePro
             "image/svg+xml",
         ];
         if (newAvatar.size < 20 * 1024 * 1024 && fileTypes.includes(newAvatar.type)) {
-            setForm({...form, avatar: newAvatar})
+            setForm({...form, avatar_url: newAvatar})
         }
     }
 
@@ -227,7 +212,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = (props: SettingsPagePro
                 <div className={classes.body}>
                     <div className={classes.avatarWrapper}>
                         <Avatar alt={`${testUser.name} ${testUser.surname}`} src="https://v4.mui.com/static/images/avatar/2.jpg" className={classes.avatar}/>
-                        {form.avatar ?
+                        {form.avatar_url ?
                             <Button
                                 className={classes.photoBtn}
                                 component='span'

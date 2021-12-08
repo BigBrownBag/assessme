@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import withLayout from "../../HOC/withLayout";
 import {Avatar, IconButton, InputAdornment, List, ListItem, makeStyles, Typography} from "@material-ui/core";
 import CustomInput from "../../components/CustomInput";
@@ -6,6 +6,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import CloseIcon from '@material-ui/icons/Close';
 import ShowRating from "../../components/ShowRating";
 import {useHistory} from "react-router-dom";
+import {useSearchData} from "./effects/use-search-data.effect";
+import {User} from "../../../utils/interface";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -84,123 +86,41 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-interface SearchData {
-    name: string;
-    surname:string;
-    role: string;
-    rating: string;
-    avatar: string;
-}
-
-const testData: SearchData[] = [
-    {
-        name: 'Mark',
-        surname: 'Out',
-        role: 'Преподаватель',
-        rating: '5.5',
-        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-    },
-    {
-        name: 'Boss',
-        surname: 'Out',
-        role: 'Преподаватель',
-        rating: '5.9',
-        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-    },
-    {
-        name: 'Flesh',
-        surname: 'Out',
-        role: 'Преподаватель',
-        rating: '5.1',
-        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-    },
-    {
-        name: 'Mark',
-        surname: 'Out',
-        role: 'Преподаватель',
-        rating: '5.5',
-        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-    },
-    {
-        name: 'Boss',
-        surname: 'Out',
-        role: 'Преподаватель',
-        rating: '5.9',
-        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-    },
-    {
-        name: 'Flesh',
-        surname: 'Out',
-        role: 'Преподаватель',
-        rating: '5.1',
-        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-    },
-    {
-        name: 'Mark',
-        surname: 'Out',
-        role: 'Преподаватель',
-        rating: '5.5',
-        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-    },
-    {
-        name: 'Boss',
-        surname: 'Out',
-        role: 'Преподаватель',
-        rating: '5.9',
-        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-    },
-    {
-        name: 'Flesh',
-        surname: 'Out',
-        role: 'Преподаватель',
-        rating: '5.1',
-        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-    },
-    {
-        name: 'Mark',
-        surname: 'Out',
-        role: 'Преподаватель',
-        rating: '5.5',
-        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-    },
-    {
-        name: 'Boss',
-        surname: 'Out',
-        role: 'Преподаватель',
-        rating: '5.9',
-        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-    },
-    {
-        name: 'Flesh',
-        surname: 'Out',
-        role: 'Преподаватель',
-        rating: '5.1',
-        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-    },
-]
-
 const SearchPage: React.FC<any> = () => {
     const classes = useStyles()
     const history = useHistory()
-    const [data, setData] = useState<SearchData[]>(testData)
+    const [state, setState] = useState<User[]>([])
     const [searchTerm, setSearchTerm] = useState<string>('')
+    const {data, error, loading} = useSearchData()
+
+    useEffect(() => {
+        setState(data)
+    }, [data])
 
     const handleSearch = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         const value = event.target.value
         if (value) {
             setSearchTerm(value)
-            setData(testData.filter(item =>
-                `${item.name} ${item.surname} ${item.role}`.toLowerCase().includes(value.toLowerCase())
+            setState(state.filter(item =>
+                `${item.firstname} ${item.surname} ${item.org_status}`.toLowerCase().includes(value.toLowerCase())
             ))
         } else {
             setSearchTerm('')
-            setData(testData)
+            setState(data)
         }
     }
 
     const handleReset = (event: React.MouseEvent<HTMLButtonElement>) => {
         setSearchTerm('')
-        setData(testData)
+        setState(data)
+    }
+
+    if (error) {
+        return <div></div>
+    }
+
+    if (loading) {
+        return <div></div>
     }
 
     return (
@@ -231,22 +151,22 @@ const SearchPage: React.FC<any> = () => {
                 </div>
                 <div className={classes.body}>
                     <List className={classes.rowList}>
-                        {data.map((item, idx) => (
+                        {state.map((item, idx) => (
                             <ListItem
                                 className={classes.rowData}
-                                onClick={(event) => history.push('/profile/1')}
+                                onClick={(event) => history.push(`/profile/${item.id}`)}
                                 key={idx}
                             >
                                 <div className={classes.avatarWrapp}>
-                                    <Avatar alt={`${item.name} ${item.surname}`} src={item.avatar} className={classes.avatar}/>
+                                    <Avatar alt={`${item.firstname} ${item.surname}`} src={item.avatar_url} className={classes.avatar}/>
                                 </div>
                                 <div className={classes.infoWrapp}>
-                                    <Typography className={classes.infoName}>{`${item.name} ${item.surname}`}</Typography>
-                                    <Typography className={classes.infoRole}>{item.role}</Typography>
+                                    <Typography className={classes.infoName}>{`${item.firstname} ${item.surname}`}</Typography>
+                                    <Typography className={classes.infoRole}>{item.org_status}</Typography>
                                 </div>
                                 <div className={classes.ratingWrapp}>
                                     <ShowRating
-                                        value={+item.rating}
+                                        value={+item.over_score}
                                     />
                                 </div>
                             </ListItem>

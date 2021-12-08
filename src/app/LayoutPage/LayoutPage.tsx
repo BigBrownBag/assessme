@@ -4,9 +4,12 @@ import Footer from "../components/Footer";
 import {makeStyles} from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
-    root: {},
+    root: {
+        height: '100%'
+    },
     main: {
         marginLeft: 256,
+        height: '100%'
     }
 }))
 
