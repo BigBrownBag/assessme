@@ -9,9 +9,11 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   logoWrapper: {
+
     height: 105,
     display: 'flex',
     alignItems: 'center',
@@ -23,11 +25,11 @@ const useStyles = makeStyles((theme) => ({
       color: '#2196F3'
   }
 }))
-
 const theme = createTheme();
 
 export default function SignIn() {
   const classes = useStyles()
+  const history = useHistory()
   const handleSubmit = (event: any) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -36,6 +38,7 @@ export default function SignIn() {
       email: data.get('email'),
       password: data.get('password'),
     });
+    history.push('/')
   };
 
   return (

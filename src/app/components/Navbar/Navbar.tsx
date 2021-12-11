@@ -88,15 +88,21 @@ const links: link[] = [
     //     admin: true
     // },
     {
-        title: 'Настройки',
-        icon: 'settings',
-        to: '/settings',
+        title: 'События',
+        icon: 'event',
+        to: '/event',
         admin: false
     },
     {
-        title: 'Вход',
+        title: 'Моя организация',
+        icon: 'home',
+        to: '/settings',
+        admin: true
+    },
+    {
+        title: 'Настройки',
         icon: 'settings',
-        to: '/signin',
+        to: '/settings',
         admin: false
     },
     // {

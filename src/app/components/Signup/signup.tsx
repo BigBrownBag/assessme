@@ -54,9 +54,9 @@ export default function SignUp() {
           }}
         >
           <div className={classes.logoWrapper}>
-                    <div className={classes.logo}>
-                        Assessme
-                    </div>
+              <div className={classes.logo}>
+                  Assessme
+              </div>
           </div>
           <Typography component="h1" variant="h5">
             Регистрация
