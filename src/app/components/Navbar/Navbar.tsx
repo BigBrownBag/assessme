@@ -93,6 +93,12 @@ const links: link[] = [
         to: '/settings',
         admin: false
     },
+    {
+        title: 'Вход',
+        icon: 'settings',
+        to: '/signin',
+        admin: false
+    },
     // {
     //     title: 'Уведомления',
     //     icon: 'notifications',
