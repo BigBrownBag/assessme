@@ -6,6 +6,8 @@ import SearchPage from "./app/Pages/Search";
 import ProfilePage from "./app/Pages/Profile";
 import MakeRatingPage from "./app/Pages/MakeRating";
 import SigninPage from './app/Pages/Signin';
+import SignupPage from './app/Pages/Signup';
+import ForgetPassPage from './app/Pages/ForgetPass';
 
 const App = () => {
   return (
@@ -16,6 +18,8 @@ const App = () => {
         <Route exact path="/profile/:userId" component={ProfilePage} />
         <Route exact path="/rate" component={MakeRatingPage} />
         <Route exact path="/signin" component={SigninPage} />
+        <Route exact path="/signup" component={SignupPage} />
+        <Route exact path="/forgetPass" component={ForgetPassPage} />
         <Redirect from="*" to="/" />
       </Switch>
   );

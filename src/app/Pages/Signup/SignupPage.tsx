@@ -1,6 +1,6 @@
 import React from 'react';
 import {makeStyles} from "@material-ui/core";
-import SignIn from "../../components/Signin";
+import SignUp from '../../components/Signup';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -10,14 +10,14 @@ const useStyles = makeStyles(theme => ({
 
 export interface SigninPageProps {}
 
-export const SigninPage: React.FC<SigninPageProps> = (props: SigninPageProps) => {
+export const SignupPage: React.FC<SigninPageProps> = (props: SigninPageProps) => {
     const classes = useStyles()
 
     return (
         <div className={classes.root}>
-            <SignIn/>
+            <SignUp/>
         </div>
     )
 }
 
-export default SigninPage;
+export default SignupPage;
