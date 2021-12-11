@@ -32,7 +32,11 @@ export default function SignUp() {
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
     console.log({
+      surname: data.get('surname'),
+      firstname: data.get('firstname'),
+      middlename: data.get('middlename'),
       email: data.get('email'),
+      username: data.get('username'),
       password: data.get('password'),
     });
   };

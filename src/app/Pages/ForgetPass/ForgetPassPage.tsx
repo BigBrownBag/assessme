@@ -33,7 +33,6 @@ export default function ForgetPassPage() {
     // eslint-disable-next-line no-console
     console.log({
       email: data.get('email'),
-      password: data.get('password'),
     });
   };
 
