@@ -14,6 +14,7 @@ import {
 } from '@devexpress/dx-react-chart-material-ui';
 import {useChartData} from "./effects/use-chart-data.effect";
 import Spinner from "../../components/Spinner";
+import {User} from "../../../utils/interface";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -143,7 +144,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export interface MainPageProps {
-    userId: number;
+    userData: User | null;
 }
 
 enum Week {
@@ -159,8 +160,8 @@ enum Week {
 export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
     const classes = useStyles()
     const history = useHistory()
-    const {userId} = props
-    const {data, monthPending, weekPending} = useChartData({userId})
+    const {userData} = props
+    const {data, monthPending, weekPending} = useChartData({userId: userData?.id})
 
     const monthData = useMemo(() => {
         return data.monthData?.map(item => ({date: new Date(item.date).getDate(), score: item.score}))
@@ -198,7 +199,7 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
                 <div className={classes.myGrade}>
                     <Typography className={classes.statisticsTitle}>Моя оценка (средняя)</Typography>
                     <ShowRating
-                        value={5.5}
+                        value={userData?.over_score || 0}
                     />
                 </div>
                 <div className={classes.gradeChart}>

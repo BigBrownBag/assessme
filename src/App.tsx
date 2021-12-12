@@ -22,9 +22,9 @@ const App = () => {
             <Switch>
                 {isAuth ?
                     <>
-                        <Route exact path="/" component={() => <MainPage userId={6}/>}/>
+                        <Route exact path="/" component={() => <MainPage userData={userData}/>}/>
                         <Route exact path="/search" component={SearchPage} />
-                        <Route exact path="/settings" component={() => <SettingsPage userId={6}/>} />
+                        <Route exact path="/settings" component={() => <SettingsPage userData={userData}/>}/>
                         <Route exact path="/profile/:userId" component={ProfilePage} />
                         <Route exact path="/rate" component={MakeRatingPage} />
                         <Route exact path="/event" component={EventPage} />
@@ -35,7 +35,7 @@ const App = () => {
                     <>
                         <Route exact path="/forget" component={() => <ForgetPage />} />
                         <Route exact path="/registration" component={() => <Registration onRegistration={onRegistration}/>}/>
-                        <Route exact path="/login" component={() => <Login state={state} onChange={(value) => setState(value)}/>} />
+                        <Route exact path="/login" component={() => <Login state={state} onChange={(value) => setState(value)}/>}/>
                         <Redirect from="*" to="/login" />
                     </>
                 }

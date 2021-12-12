@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import DataRepository from "../../../../api/DataRepository";
 
 interface MonthChartDataParams {
-    userId: string | number;
+    userId: string | number | undefined;
 }
 
 export interface ChartData {

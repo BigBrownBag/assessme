@@ -4,7 +4,7 @@ import DataRepository from "../../../../api/DataRepository";
 import {Form, User} from "../../../../utils/interface";
 
 interface ProfileDataProps {
-    id: string | number;
+    id: string | number | undefined;
  }
 
  interface ProfileData {

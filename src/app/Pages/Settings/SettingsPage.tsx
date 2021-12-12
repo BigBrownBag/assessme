@@ -92,7 +92,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export interface SettingsPageProps {
-    userId: number
+    userData: User | null;
 }
 
 export interface Field {
@@ -171,11 +171,11 @@ const defaultForm: Form = {
 
 export const SettingsPage: React.FC<SettingsPageProps> = (props: SettingsPageProps) => {
     const classes = useStyles()
-    const {userId} = props
+    const {userData} = props
     const [editMode, setEditMode] = useState<boolean>(false)
     const [form, setForm] = useState<Form>(defaultForm)
     const [avatar, setAvatar] = useState<string>()
-    const {data, loading, onProfileChange} = useProfileData({id: userId})
+    const {data, loading, onProfileChange} = useProfileData({id: userData?.id})
 
     useEffect(() => {
         if (data) {
