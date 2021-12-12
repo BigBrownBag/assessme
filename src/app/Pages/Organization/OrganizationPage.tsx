@@ -16,14 +16,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
-import DownloadIcon from '@mui/icons-material/Download';
-import CopyAllIcon from '@mui/icons-material/CopyAll';
-import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit'
-import DeleteIcon from '@mui/icons-material/Delete'
+import IconButton from '@mui/material/IconButton';
 
-
-export interface EventPageProps {}
+export interface OrganizationPageProps {}
 const useStyles = makeStyles(theme => ({
     root: {
         paddingTop: '100px',
@@ -37,44 +33,30 @@ const useStyles = makeStyles(theme => ({
     tableCell: {
         fontSize: '16px !important',
     },
-    btn: {
+    btnGroup: {
         display: 'flex',
         width: '100%',
         justifyContent: 'right',
-        padding: '20px'
+        padding: 32
+    },
+    btn: {
+        marginRight: '16px !important'
     },
 }))
 
 const columns = [
-    { id: 'title', label: 'Название', minWidth: 170 },
-    { id: 'date', label: 'Дата', minWidth: 100 },
+    { id: 'initials', label: 'ФИО сотрудника', minWidth: 170 },
+    { id: 'role', label: 'Роль', minWidth: 100 },
     { id: 'score ', label: 'Оценка', minWidth: 100 },
-    { id: 'btns', label: '', minWidth: 10 },
+    { id: 'btn ', label: '', minWidth: 20 },
   ];
   
   const rows = [
-      {title: 'Событие 1', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
+      {title: 'Лозинская Наталья Ярославовна', date: 'employee', score: 5},
+      {title: 'Кондратов Павел Олегович', date: 'employee', score: 5},
   ];
 
-export const EventPage: React.FC<EventPageProps> = (props: EventPageProps) => {
+export const OrganizationPage: React.FC<OrganizationPageProps> = (props: OrganizationPageProps) => {
     const classes = useStyles()
     const [open, setOpen] = React.useState(false);
     const [edit, setEdit] = React.useState(false);
@@ -94,66 +76,59 @@ export const EventPage: React.FC<EventPageProps> = (props: EventPageProps) => {
     const handleCloseEdit = () => {
         setEdit(false);
     };
-    console.log(rows)
+
     return (
         <div className={classes.root}>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Добавить событие</DialogTitle>
+                <DialogTitle>Отправить приглашение</DialogTitle>
                 <DialogContent>
                 <TextField
                     autoFocus
                     margin="dense"
-                    id="title"
-                    label="Название события"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                />
-                <TextField
-                    autoFocus
-                    margin="dense"
-                    id="date"
-                    label="Дата"
-                    type="date"
+                    id="email"
+                    label="Почта сотрудника"
+                    type="email"
                     fullWidth
                     variant="standard"
                 />
                 </DialogContent>
                 <DialogActions>
                 <CustomButton onClick={handleClose}>Отменить</CustomButton>
-                <CustomButton onClick={handleClose}>Добавить</CustomButton>
+                <CustomButton onClick={handleClose}>Отправить</CustomButton>
                 </DialogActions>
             </Dialog>
 
             <Dialog open={edit} onClose={handleCloseEdit}>
-                <DialogTitle>Редактировать событие</DialogTitle>
+                <DialogTitle>Редактировать</DialogTitle>
                 <DialogContent>
                 <TextField
                     autoFocus
                     margin="dense"
-                    id="title"
-                    label="Название события"
+                    id="initials"
+                    label="ФИО сотрудника"
                     type="text"
-                    value="hello"
+                    value="Лозинская Наталья Ярославовна"
                     fullWidth
+                    disabled={true}
                     variant="standard"
                 />
                 <TextField
                     autoFocus
                     margin="dense"
-                    id="date"
-                    label="Дата"
-                    type="date"
-                    value="2020-01-01"
+                    id="role"
+                    label="Роль"
+                    type="text"
+                    value="employee"
                     fullWidth
                     variant="standard"
                 />
                 </DialogContent>
                 <DialogActions>
                 <CustomButton onClick={handleCloseEdit}>Отменить</CustomButton>
-                <CustomButton onClick={handleCloseEdit}>Добавить</CustomButton>
+                <CustomButton onClick={handleCloseEdit}>Изменить</CustomButton>
                 </DialogActions>
             </Dialog>
+
 
             <Paper className={classes.paper} sx={{ width: '100%', overflow: 'hidden' }}>
             <TableContainer sx={{ maxHeight: 450 }}>
@@ -179,18 +154,9 @@ export const EventPage: React.FC<EventPageProps> = (props: EventPageProps) => {
                             <TableCell className={classes.tableCell} align="center">{row.date}</TableCell>
                             <TableCell className={classes.tableCell} align="center">{row.score}</TableCell>
                             <TableCell className={classes.tableCell} align="center">
-                                <IconButton aria-label="download">
-                                    <DownloadIcon/>
-                                </IconButton>
-                                <IconButton aria-label="copy">
-                                    <CopyAllIcon/>
-                                </IconButton>
-                                <IconButton aria-label="edit" onClick={handleClickEdit}>
-                                    <EditIcon/>
-                                </IconButton>
-                                <IconButton aria-label="delete">
-                                    <DeleteIcon/>
-                                </IconButton>
+                            <IconButton aria-label="edit" onClick={handleClickEdit}>
+                                <EditIcon/>
+                            </IconButton>
                             </TableCell>
                         </TableRow>
                     ))}
@@ -198,13 +164,16 @@ export const EventPage: React.FC<EventPageProps> = (props: EventPageProps) => {
                 </Table>
             </TableContainer>
             </Paper>
-            <div className={classes.btn}>
-                <CustomButton onClick={handleClickOpen}>
-                 Добавить событие
+            <div className={classes.btnGroup}>
+                <CustomButton className={classes.btn} onClick={handleClickOpen}>
+                 Отправить приглашение
+                </CustomButton>
+                <CustomButton>
+                 Рейтинг
                 </CustomButton>
             </div>
         </div>
     )
 }
 
-export default withLayout(EventPage);
+export default withLayout(OrganizationPage);

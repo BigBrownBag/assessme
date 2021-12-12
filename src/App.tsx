@@ -9,6 +9,7 @@ import SigninPage from './app/Pages/Signin';
 import SignupPage from './app/Pages/Signup';
 import ForgetPassPage from './app/Pages/ForgetPass';
 import EventPage from './app/Pages/Event/EventPage';
+import OrganizationPage from './app/Pages/Organization';
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
         <Route exact path="/signup" component={SignupPage} />
         <Route exact path="/forgetPass" component={ForgetPassPage} />
         <Route exact path="/event" component={EventPage} />
+        <Route exact path="/organization" component={OrganizationPage} />
         <Redirect from="*" to="/" />
       </Switch>
   );

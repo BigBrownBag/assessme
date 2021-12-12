@@ -96,7 +96,7 @@ const links: link[] = [
     {
         title: 'Моя организация',
         icon: 'home',
-        to: '/settings',
+        to: '/organization',
         admin: true
     },
     {
