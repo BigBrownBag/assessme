@@ -28,10 +28,9 @@ export const useSearchData = (): SearchData => {
             })
             .catch(err => setError(err))
             .finally(() => setLoading(false))
-
         return () => controller.abort()
     }, [])
-
+    console.log(data)
     return {
         data,
         error,
