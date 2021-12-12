@@ -1,83 +1,96 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import {makeStyles} from "@material-ui/core";
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Grid from '@mui/material/Grid';
+import React, {useState} from 'react';
+import {Box, Container, makeStyles} from "@material-ui/core";
+import CustomTextField from "../../components/CustomTextField";
+import CustomButton from "../../components/CustomButton";
 
 const useStyles = makeStyles((theme) => ({
-  logoWrapper: {
-    height: 105,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  logo: {
-      fontSize: 48,
-      fontFamily: '"Reenie Beanie"',
-      color: '#2196F3'
-  }
+    root: {
+        padding: '80px 230px'
+    },
+    logoWrapper: {
+        width: '100%',
+        borderBottom: '1px solid #2196F3',
+        height: 105,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    logo: {
+        fontSize: 48,
+        fontFamily: '"Reenie Beanie"',
+        color: '#2196F3'
+    },
+    form: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        width: '100%',
+        marginTop: 64
+    },
+    btn: {
+        marginTop: 32
+    },
+    secondaryBtn: {
+        marginTop: 16,
+        '&:hover': {
+            background: 'rgba(33, 150, 243, 0.34)'
+        }
+    },
+    card: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    field: {
+        marginBottom: 16
+    }
 }))
 
-const theme = createTheme();
+interface ForgetPassProps {}
 
-export default function ForgetPassPage() {
-  const classes = useStyles()
-  const handleSubmit = (event: any) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-    });
-  };
+export default function ForgetPassPage(props: ForgetPassProps) {
+    const classes = useStyles()
+    const [state, setState] = useState<string>()
 
-  return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <div className={classes.logoWrapper}>
-                    <div className={classes.logo}>
-                        Assessme
-                    </div>
-          </div>
-          <Typography component="h1" variant="h5">
-            Восстановление пароля
-          </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Восстановить
-            </Button>
-          </Box>
-        </Box>
-      </Container>
-    </ThemeProvider>
-  );
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+    };
+
+    return (
+      <div className={classes.root}>
+          <Container component="main" maxWidth="xs">
+              <Box
+                  className={classes.card}
+              >
+                  <div className={classes.logoWrapper}>
+                      <div className={classes.logo}>
+                          Assessme
+                      </div>
+                  </div>
+
+                  <form onSubmit={handleSubmit} noValidate className={classes.form}>
+                      <CustomTextField
+                          className={classes.field}
+                          required
+                          fullWidth
+                          id="username"
+                          label="Логин"
+                          name="username"
+                          autoComplete="username"
+                          type="text"
+                          autoFocus
+                          value={state}
+                          onChange={(event) => setState(event.currentTarget.value)}
+                      />
+                      <CustomButton
+                          className={classes.btn}
+                          type="submit"
+                      >
+                          Войти
+                      </CustomButton>
+                  </form>
+              </Box>
+          </Container>
+      </div>
+    );
 }

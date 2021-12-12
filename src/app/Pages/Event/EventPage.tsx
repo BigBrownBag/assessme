@@ -1,6 +1,5 @@
 import React from 'react';
 import {makeStyles} from "@material-ui/core";
-import withLayout from "../../HOC/withLayout";
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -13,17 +12,15 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
 import DownloadIcon from '@mui/icons-material/Download';
 import CopyAllIcon from '@mui/icons-material/CopyAll';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 
-
 export interface EventPageProps {}
+
 const useStyles = makeStyles(theme => ({
     root: {
         paddingTop: '100px',
@@ -50,29 +47,29 @@ const columns = [
     { id: 'date', label: 'Дата', minWidth: 100 },
     { id: 'score ', label: 'Оценка', minWidth: 100 },
     { id: 'btns', label: '', minWidth: 10 },
-  ];
+];
   
-  const rows = [
-      {title: 'Событие 1', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-      {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-  ];
+const rows = [
+    {title: 'Событие 1', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
+    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
+    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
+    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
+    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
+    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
+    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
+    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
+    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
+    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
+    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
+    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
+    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
+    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
+    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
+    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
+    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
+    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
+    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
+];
 
 export const EventPage: React.FC<EventPageProps> = (props: EventPageProps) => {
     const classes = useStyles()
@@ -94,7 +91,7 @@ export const EventPage: React.FC<EventPageProps> = (props: EventPageProps) => {
     const handleCloseEdit = () => {
         setEdit(false);
     };
-    console.log(rows)
+
     return (
         <div className={classes.root}>
             <Dialog open={open} onClose={handleClose}>
@@ -207,4 +204,4 @@ export const EventPage: React.FC<EventPageProps> = (props: EventPageProps) => {
     )
 }
 
-export default withLayout(EventPage);
+export default EventPage;

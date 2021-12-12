@@ -60,16 +60,17 @@ const useStyles = makeStyles((theme) => ({
 
 export interface NavbarProps {
     user: User | null;
+    isAuth: boolean;
 }
 
-interface link {
+interface Lnk {
     title: string;
     icon: string;
     to: string;
     admin: boolean;
 }
 
-const links: link[] = [
+const links: Lnk[] = [
     {
         title: 'Профиль',
         icon: 'people',
@@ -137,25 +138,33 @@ const Navbar: React.FC<NavbarProps> = (props: NavbarProps) => {
                     </div>
                 </div>
 
-                <div className={classes.avatarWrapper}>
-                    <Avatar alt="Remy Sharp" src={user?.avatar_url} className={classes.avatar}/>
+                {props.isAuth ?
+                    <>
+                        <div className={classes.avatarWrapper}>
+                            <Avatar alt="Remy Sharp" src={user?.avatar_url} className={classes.avatar}/>
 
-                    <Typography className={classes.avatarTitle}>{`${user?.firstname} ${user?.surname}`}</Typography>
-                </div>
+                            <Typography className={classes.avatarTitle}>{`${user?.firstname} ${user?.surname}`}</Typography>
+                        </div>
 
-                <List>
-                    { links.map((item, idx) => (
-                        <ListItem key={idx} className={classes.link}>
-                            <Link to={item.to} className="w-full flex flex-row">
+                        <List>
+                            { links.map((item, idx) => (
+                                    <ListItem key={idx} className={classes.link}>
+                                        <Link to={item.to} className="w-full flex flex-row">
                                 <span className={clsx("material-icons", "pr-4", classes.icon)}>
                                     {item.icon}
                                 </span>
-                                <Typography variant="body1" className={classes.title}>{item.title}</Typography>
-                            </Link>
-                        </ListItem>
-                        )
-                    )}
-                </List>
+                                            <Typography variant="body1" className={classes.title}>{item.title}</Typography>
+                                        </Link>
+                                    </ListItem>
+                                )
+                            )}
+                        </List>
+                    </>
+                    :
+                    <div>
+
+                    </div>
+                }
             </div>
         </Drawer>
     )

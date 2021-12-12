@@ -1,6 +1,5 @@
 import React from 'react';
 import {makeStyles} from "@material-ui/core";
-import withLayout from "../../HOC/withLayout";
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -13,9 +12,7 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit'
 import IconButton from '@mui/material/IconButton';
 
@@ -176,4 +173,4 @@ export const OrganizationPage: React.FC<OrganizationPageProps> = (props: Organiz
     )
 }
 
-export default withLayout(OrganizationPage);
+export default OrganizationPage;

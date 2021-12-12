@@ -2,10 +2,6 @@ import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
 
 export const BASE_URL: string = 'localhost:3000'
 const root = 'https://assessme.paulislava.space'
-const headers = {
-    'Content-Type': 'application/json charset=utf-8',
-    'Accept': 'application/json charset=utf-8'
-}
 
 class DataRepository {
     constructor(private readonly root: string) {
