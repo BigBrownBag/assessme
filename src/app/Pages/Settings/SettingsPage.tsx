@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Avatar, Button, List, ListItem, makeStyles, Typography} from "@material-ui/core";
-import withLayout from "../../HOC/withLayout";
 import CustomButton from "../../components/CustomButton";
 import CustomTextField from "../../components/CustomTextField";
 import confirmValue from "../../../utils/confirmValue";
-import {Form} from "../../../utils/interface";
+import {Form, User} from "../../../utils/interface";
 import {useProfileData} from "../Profile/effects/use-profile-data.effect";
+import Spinner from "../../components/Spinner";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -91,7 +91,9 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-export interface SettingsPageProps {}
+export interface SettingsPageProps {
+    userId: number
+}
 
 export interface Field {
     field: string,
@@ -145,14 +147,14 @@ const fields: Field[] = [
     },
     {
         field: 'Организация',
-        fieldProperty: 'org',
+        fieldProperty: 'org_title',
         editable: true,
         type: 'text'
     }
 ]
 
 const defaultForm: Form = {
-    avatar_url: null,
+    avatar_url: "",
     email: '',
     firstname: '',
     id: null,
@@ -163,16 +165,27 @@ const defaultForm: Form = {
     over_score: null,
     scores_count: '',
     surname: '',
-    username: ''
+    username: '',
+    org_title: ''
 }
 
 export const SettingsPage: React.FC<SettingsPageProps> = (props: SettingsPageProps) => {
     const classes = useStyles()
+    const {userId} = props
     const [editMode, setEditMode] = useState<boolean>(false)
     const [form, setForm] = useState<Form>(defaultForm)
+    const [avatar, setAvatar] = useState<string>()
+    const {data, loading, onProfileChange} = useProfileData({id: userId})
+
+    useEffect(() => {
+        if (data) {
+            setForm(data as any)
+        }
+    }, [data])
 
     const handleRemove = () => {
-        setForm({...form, avatar_url: null})
+        setForm({...form, avatar_url: ""})
+        setAvatar("")
     }
 
     const handleSave = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -183,9 +196,10 @@ export const SettingsPage: React.FC<SettingsPageProps> = (props: SettingsPagePro
             "image/png",
             "image/webp",
             "image/svg+xml",
-        ];
+        ]
         if (newAvatar.size < 20 * 1024 * 1024 && fileTypes.includes(newAvatar.type)) {
-            setForm({...form, avatar_url: newAvatar})
+            setAvatar(URL.createObjectURL(newAvatar))                                      //TODO add avatar_file to post req
+            setForm({...form, avatar_url: URL.createObjectURL(newAvatar)})
         }
     }
 
@@ -193,73 +207,71 @@ export const SettingsPage: React.FC<SettingsPageProps> = (props: SettingsPagePro
         event.preventDefault()
     }
 
-    const testUser: any = {
-        name: 'Иван',
-        role: 'Преподаватель',
-        surname: 'Иванов',
-        organization: 'Уральский федеральный университет имени первого Президента России Б. Н. Ельцина',
-        email: 'IvanovUrfu@ivan.me',
-        permissions: 'Все',
-        login: 'Ivan123',
-        password: '1234',
-        rating: 5.5
-    }
-
     return (
         <div className={classes.root}>
             <div className={classes.card}>
                 <div className={classes.header}><Typography className={classes.name}>Настройки</Typography></div>
                 <div className={classes.body}>
-                    <div className={classes.avatarWrapper}>
-                        <Avatar alt={`${testUser.name} ${testUser.surname}`} src="https://v4.mui.com/static/images/avatar/2.jpg" className={classes.avatar}/>
-                        {form.avatar_url ?
-                            <Button
-                                className={classes.photoBtn}
-                                component='span'
-                                disableRipple
-                                variant="outlined"
-                                onClick={handleRemove}
-                            >
-                                Отменить
-                            </Button>
-                            :
-                            <>
-                                <input accept="image/*" hidden id="icon-button-file" type="file" onChange={handleSave}/>
-                                <label htmlFor="icon-button-file">
-                                    <Button
-                                        className={classes.photoBtn}
-                                        component='span'
-                                        disableRipple
-                                    >
-                                        Изменить фото
-                                    </Button>
-                                </label>
-                            </>
-                        }
-                    </div>
-                    <form onSubmit={handleSubmit}>
-                        <List className={classes.fieldList}>
-                            {fields.map((item, idx) => (
-                                !(!editMode && item.type === 'password') && <ListItem className={classes.field} key={idx}>
-                                    <Typography className={classes.filedTitle}>{item.field}</Typography>
-                                    {editMode && item.editable ?
-                                        <CustomTextField
-                                            error={
-                                                confirmValue(form[item.fieldProperty]!, item.type!)
-                                            }
-                                            helperText={confirmValue(form[item.fieldProperty]!, item.type!) ? 'Empty field!' : ' '} //TODO
-                                            type={item.type}
-                                            placeholder={testUser[item.fieldProperty]}
-                                            value={form[item.fieldProperty]}
-                                            onChange={event => setForm({...form, [item.fieldProperty]: event.target.value})}
-                                        />
+                    {loading ?
+                        <Spinner
+                        size={200}
+                        />
+                        :
+                        <>
+                            <div className={classes.avatarWrapper}>
+                                <Avatar alt={`${data?.firstname} ${data?.surname}`} src={avatar} className={classes.avatar}/>
+                                {editMode && (
+                                    form.avatar_url ?
+                                        <Button
+                                            className={classes.photoBtn}
+                                            component='span'
+                                            disableRipple
+                                            variant="outlined"
+                                            onClick={handleRemove}
+                                        >
+                                            Отменить
+                                        </Button>
                                         :
-                                        <Typography className={classes.fieldDesc}>{testUser[item.fieldProperty]}</Typography>
-                                    }
-                                </ListItem>
-                            ))}
-                        </List>
-                    </form>
+                                        <>
+                                            <input accept="image/*" hidden id="icon-button-file" type="file" onChange={handleSave}/>
+                                            <label htmlFor="icon-button-file">
+                                                <Button
+                                                    className={classes.photoBtn}
+                                                    component='span'
+                                                    disableRipple
+                                                >
+                                                    Изменить фото
+                                                </Button>
+                                            </label>
+                                        </>
+                                )}
+                            </div>
+                            <form onSubmit={handleSubmit}>
+                                <List className={classes.fieldList}>
+                                    {fields.map((item, idx) => (
+                                        !(!editMode && item.type === 'password') && <ListItem className={classes.field} key={idx}>
+                                            <Typography className={classes.filedTitle}>{item.field}</Typography>
+                                            {editMode && item.editable ?
+                                                <CustomTextField
+                                                    error={
+                                                        confirmValue(form[item.fieldProperty]!, item.type!)
+                                                    }
+                                                    helperText={confirmValue(form[item.fieldProperty]!, item.type!) ? 'Empty field!' : ' '} //TODO
+                                                    type={item.type}
+                                                    disabled={item.type === 'password' || item.fieldProperty === 'org_status'}                                                     // TODO
+                                                    placeholder={item.fieldProperty === 'org' ? data?.org?.title : (data?.[item.fieldProperty as keyof User]?.toString() || '')}
+                                                    value={form[item.fieldProperty]}
+                                                    onChange={event => setForm({...form, [item.fieldProperty]: event.target.value})}
+                                                />
+                                                :
+                                                <Typography className={classes.fieldDesc}>{item.fieldProperty === 'org' ? data?.org?.title : data?.[item.fieldProperty as keyof User]}</Typography>
+                                            }
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            </form>
+                        </>
+                    }
                 </div>
 
                 <div className={classes.btnGroup}>
@@ -270,7 +282,6 @@ export const SettingsPage: React.FC<SettingsPageProps> = (props: SettingsPagePro
                                     className={classes.btn}
                                     onClick={(event) => {
                                         setEditMode(false)
-                                        setForm(defaultForm)
                                     }}
                                 >
                                     Отменить
@@ -278,7 +289,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = (props: SettingsPagePro
                                 <CustomButton
                                     onClick={(event) => {
                                         setEditMode(false)
-                                        setForm(defaultForm)
+                                        onProfileChange(form)
                                     }}
                                 >
                                     Сохранить
@@ -286,6 +297,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = (props: SettingsPagePro
                             </>
                             :
                             <CustomButton
+                                disabled={loading}
                                 onClick={(event) => {
                                     setEditMode(true);
                                 }}
@@ -300,4 +312,4 @@ export const SettingsPage: React.FC<SettingsPageProps> = (props: SettingsPagePro
     )
 }
 
-export default withLayout(SettingsPage);
+export default SettingsPage;

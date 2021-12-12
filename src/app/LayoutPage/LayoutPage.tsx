@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import {makeStyles} from "@material-ui/core";
+import {useProfileData} from "../Pages/Profile/effects/use-profile-data.effect";
+import {User} from "../../utils/interface";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -19,11 +21,17 @@ export interface LayoutPageProps {
 
 export const LayoutPage: React.FC<LayoutPageProps> = ({children, ...otherProps}) => {
     const classes = useStyles()
+    const {data} = useProfileData({id: "6"})
+    const [userData, setUserData] = useState<User | null>(null)
+
+    useEffect(() => {
+        setUserData(data)
+    }, [data])
 
     return (
         <div className={classes.root}>
             <Navbar
-                user={{admin: true}}
+                user={userData}
             />
 
             <main className={classes.main}>

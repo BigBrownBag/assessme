@@ -1,6 +1,5 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {Avatar, List, ListItem, makeStyles, Typography} from "@material-ui/core";
-import withLayout from "../../HOC/withLayout";
 import avatars from '../../../img/avatars.svg';
 import notif from '../../../img/notif.svg';
 import problem from '../../../img/problem.svg';
@@ -13,14 +12,8 @@ import {
   ValueAxis,
   SplineSeries,
 } from '@devexpress/dx-react-chart-material-ui';
-
-export interface UserData {
-    name: string;
-    surname:string;
-    role: string;
-    rating: string;
-    avatar: string;
-}
+import {useChartData} from "./effects/use-chart-data.effect";
+import Spinner from "../../components/Spinner";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -149,64 +142,33 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-export interface MainPageProps {}
+export interface MainPageProps {
+    userId: number;
+}
 
-const chartDataWeek  = [
-    { titleDay: 'Пн', countScore: 2 },
-    { titleDay: 'Вт', countScore: 6 },
-    { titleDay: 'Ср', countScore: 2 },
-    { titleDay: 'Чт', countScore: 4 },
-    { titleDay: 'Пт', countScore: 5 },
-    { titleDay: 'Сб', countScore: 6 },
-    { titleDay: 'Вс', countScore: 6 },
-]
-const chartDataMonth = [
-    {title: 1, score: 3},
-    {title: 4, score: 4},
-    {title: 8, score: 5},
-    {title: 13, score: 3},
-    {title: 21, score: 4},
-    {title: 23, score: 5},
-    {title: 25, score: 3},
-    {title: 26, score: 4},
-    {title: 29, score: 3},
-    {title: 30, score: 4},
-    {title: 31, score: 5}
-]
-const testData: UserData[] = [
-    {
-        name: 'Mark',
-        surname: 'Out',
-        role: 'Студент',
-        rating: '5.5',
-        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-    },
-    {
-        name: 'Boss',
-        surname: 'Out',
-        role: 'Студент',
-        rating: '5.9',
-        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-    },
-    {
-        name: 'Flesh',
-        surname: 'Out',
-        role: 'Студент',
-        rating: '5.1',
-        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-    },
-    {
-        name: 'Mark',
-        surname: 'Out',
-        role: 'Студент',
-        rating: '5.5',
-        avatar: 'https://www.artmajeur.com/medias/standard/d/r/drashti9593/artwork/13493657_par11.jpg?v=1595320722'
-    },
-]
+enum Week {
+    'Пн',
+    'Вт',
+    'Ср',
+    'Чт',
+    'Пт',
+    'Сб',
+    'Вс'
+}
 
 export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
     const classes = useStyles()
     const history = useHistory()
+    const {userId} = props
+    const {data, monthPending, weekPending} = useChartData({userId})
+
+    const monthData = useMemo(() => {
+        return data.monthData?.map(item => ({date: new Date(item.date).getDate(), score: item.score}))
+    }, [data.monthData])
+
+    const weekData = useMemo(() => {
+        return data.weekData?.map(item => ({date: Week[item.day], cnt: item.cnt}))
+    }, [data.weekData])
 
     return (
         <div className={classes.root}>
@@ -216,7 +178,7 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
                         <div>
                             <img src={avatars} alt="avatar"/>
                         </div>
-                        <Typography>8</Typography>
+                        <Typography>{data.ratesData?.length || '-'}</Typography>
                         <Typography className={classes.notificationsTitle}>Оценивших</Typography>
                     </div>
                     <div className={classes.notifications}>
@@ -241,54 +203,69 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
                 </div>
                 <div className={classes.gradeChart}>
                     <Typography className={classes.statisticsTitle}>Динамика оценки (за месяц)</Typography>
-                    <Chart
-                    data={chartDataMonth}
-                    height={300}
-                    >
-                        <ArgumentAxis />
-                        <ValueAxis />
-                        <SplineSeries
-                            name="spline"
-                            valueField="score"
-                            argumentField="title"
+                    {monthPending ?
+                        <Spinner
+                            size={300}
+                            thickness={3}
                         />
-                    </Chart>
+                        :
+                        data.monthData &&
+                        <Chart
+                            data={monthData}
+                            height={300}
+                        >
+                            <ArgumentAxis />
+                            <ValueAxis />
+                            <SplineSeries
+                                name="spline"
+                                valueField="score"
+                                argumentField="date"
+                            />
+                        </Chart>
+                    }
                 </div>
             </div>
             <div className={classes.right}>
                 <div className={classes.statistics}>
                     <Typography className={classes.statisticsTitle}>Статистика оценок (по дням недели)</Typography>
-                    <Chart
-                    data={chartDataWeek}
-                    height={166}
-                    >
-                        <ArgumentAxis />
-
-                        <BarSeries
-                            valueField="countScore"
-                            argumentField="titleDay"
+                    {weekPending ?
+                        <Spinner
+                            size={166}
+                            thickness={3}
                         />
-                    </Chart>
+                        :
+                        data.weekData &&
+                        <Chart
+                            data={weekData}
+                            height={166}
+                        >
+                            <ArgumentAxis />
+                            <BarSeries
+                                valueField="cnt"
+                                argumentField="date"
+                            />
+                        </Chart>
+                    }
                 </div> 
                 <List className={classes.rowList}>
                     <Typography className={classes.statisticsTitle}>Последние оценки</Typography>
-                    {testData.map((item, idx) => (
+                    {data.ratesData?.map((item, idx) => (
                         <ListItem
                             className={classes.rowData}
-                            onClick={() => history.push('/profile/1')}
+                            onClick={() => history.push(`/profile/${item.rater.id}`)}
                             key={idx}
                         >
                             <div className={classes.avatarWrapp}>
-                                <Avatar alt={`${item.name} ${item.surname}`} src={item.avatar} className={classes.avatar}/>
+                                <Avatar alt={`${item.rater.firstname} ${item.rater.surname}`} src={item.rater.avatar_url} className={classes.avatar}/>
                             </div>
                             <div className={classes.infoWrapp}>
-                                <Typography className={classes.infoName}>{`${item.name} ${item.surname}`}</Typography>
-                                <Typography className={classes.infoRole}>{item.role}</Typography>
+                                <Typography className={classes.infoName}>{`${item.rater.firstname} ${item.rater.surname}`}</Typography>
+                                <Typography className={classes.infoRole}>{item.rater.org_status}</Typography>
                             </div>
                             <div className={classes.ratingWrapp}>
                                 <ShowRating
                                     size="small"
-                                    value={+item.rating}
+                                    value={+item.score}
                                 />
                             </div>
                         </ListItem>
@@ -299,4 +276,4 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
     )
 }
 
-export default withLayout(MainPage)
+export default MainPage

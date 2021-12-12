@@ -4,10 +4,10 @@ import CustomButton from "../../components/CustomButton";
 import {useHistory, useParams} from "react-router-dom";
 import {Field} from "../Settings/SettingsPage";
 import {BASE_URL} from "../../../api/DataRepository";
-import withLayout from "../../HOC/withLayout";
 import ShowRating from "../../components/ShowRating";
 import {useProfileData} from "./effects/use-profile-data.effect";
 import {User} from "../../../utils/interface";
+import Spinner from "../../components/Spinner";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -130,10 +130,6 @@ const ProfilePage: React.FC<any> = (props) => {
         navigator.clipboard.writeText(BASE_URL + history.location.pathname)
     }
 
-    if (loading) {
-        return <div></div>
-    }
-
     if (error) {
         return <div></div>
     }
@@ -141,35 +137,44 @@ const ProfilePage: React.FC<any> = (props) => {
     return(
         <div className={classes.root}>
             <div className={classes.card}>
-                <div className={classes.header}><Typography className={classes.name}>{`${data?.firstname} ${data?.surname}`}</Typography></div>
+                <div className={classes.header}><Typography className={classes.name}>{`${data?.firstname || ''} ${data?.surname || ''}`}</Typography></div>
                 <div className={classes.body}>
-                    <div className={classes.avatarWrapper}>
-                        <Avatar alt={`${data?.firstname} ${data?.surname}`} src={data?.avatar_url} className={classes.avatar}/>
-                        <Button
-                            className={classes.photoBtn}
-                            onClick={handleProfileCopy}
-                            disableRipple
-                        >
-                            Копировать профиль
-                        </Button>
+                    {loading ?
+                        <Spinner
+                            size={200}
+                            thickness={3}
+                        />
+                        :
+                        <>
+                            <div className={classes.avatarWrapper}>
+                                <Avatar alt={`${data?.firstname} ${data?.surname}`} src={data?.avatar_url} className={classes.avatar}/>
+                                <Button
+                                    className={classes.photoBtn}
+                                    onClick={handleProfileCopy}
+                                    disableRipple
+                                >
+                                    Копировать профиль
+                                </Button>
 
-                        <div className={classes.ratingWrapp}>
-                            <ShowRating
-                                value={+(data?.over_score || 0)}
-                            />
-                        </div>
-                    </div>
+                                <div className={classes.ratingWrapp}>
+                                    <ShowRating
+                                        value={+(data?.over_score || 0)}
+                                    />
+                                </div>
+                            </div>
 
-                    <div className={classes.fieldList}>
-                        <List>
-                            {fields.map((item, idx) => (
-                                <ListItem className={classes.field} key={idx}>
-                                    <Typography className={classes.filedTitle}>{item.field}</Typography>
-                                    <Typography className={classes.fieldDesc}>{item.fieldProperty !== 'org' ? data?.[item.fieldProperty as keyof User] : data?.org?.title || 'Не указано'}</Typography>
-                                </ListItem>
-                            ))}
-                        </List>
-                    </div>
+                            <div className={classes.fieldList}>
+                                <List>
+                                    {fields.map((item, idx) => (
+                                        <ListItem className={classes.field} key={idx}>
+                                            <Typography className={classes.filedTitle}>{item.field}</Typography>
+                                            <Typography className={classes.fieldDesc}>{item.fieldProperty !== 'org' ? data?.[item.fieldProperty as keyof User] : data?.org?.title || 'Не указано'}</Typography>
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            </div>
+                        </>
+                    }
                 </div>
 
                 <div className={classes.btnGroup}>
@@ -192,4 +197,4 @@ const ProfilePage: React.FC<any> = (props) => {
     )
 }
 
-export default withLayout(ProfilePage)
+export default ProfilePage

@@ -3,6 +3,7 @@ import {Avatar, Drawer, List, ListItem, Typography} from '@material-ui/core';
 import {makeStyles} from "@material-ui/core";
 import {Link} from 'react-router-dom';
 import clsx from 'clsx';
+import {User} from "../../../utils/interface";
 
 const useStyles = makeStyles((theme) => ({
     wrapper: {
@@ -58,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export interface NavbarProps {
-    user: any;
+    user: User | null;
 }
 
 interface link {
@@ -109,6 +110,7 @@ const links: link[] = [
 
 const Navbar: React.FC<NavbarProps> = (props: NavbarProps) => {
     const classes = useStyles()
+    const { user } = props
 
     return (
         <Drawer
@@ -124,33 +126,21 @@ const Navbar: React.FC<NavbarProps> = (props: NavbarProps) => {
                 </div>
 
                 <div className={classes.avatarWrapper}>
-                    <Avatar alt="Remy Sharp" src="https://v4.mui.com/static/images/avatar/2.jpg" className={classes.avatar}/>
+                    <Avatar alt="Remy Sharp" src={user?.avatar_url} className={classes.avatar}/>
 
-                    <Typography className={classes.avatarTitle}>Иванов Иван</Typography>
+                    <Typography className={classes.avatarTitle}>{`${user?.firstname} ${user?.surname}`}</Typography>
                 </div>
 
                 <List>
                     { links.map((item, idx) => (
-                        item.admin ?
-                            props.user.admin && (
-                                <ListItem key={idx} className={classes.link}>
-                                    <Link to={item.to} className="w-full flex flex-row">
-                                        <span className={clsx("material-icons", "pr-4", classes.icon)}>
-                                            {item.icon}
-                                        </span>
-                                        <Typography variant="body1" className={classes.title}>{item.title}</Typography>
-                                    </Link>
-                                </ListItem>
-                            )
-                            :
-                            (<ListItem key={idx} className={classes.link}>
-                                <Link to={item.to} className="w-full flex flex-row">
-                                        <span className={clsx("material-icons", "pr-4", classes.icon)}>
-                                            {item.icon}
-                                        </span>
-                                    <Typography variant="body1" className={classes.title}>{item.title}</Typography>
-                                </Link>
-                            </ListItem>)
+                        <ListItem key={idx} className={classes.link}>
+                            <Link to={item.to} className="w-full flex flex-row">
+                                <span className={clsx("material-icons", "pr-4", classes.icon)}>
+                                    {item.icon}
+                                </span>
+                                <Typography variant="body1" className={classes.title}>{item.title}</Typography>
+                            </Link>
+                        </ListItem>
                         )
                     )}
                 </List>

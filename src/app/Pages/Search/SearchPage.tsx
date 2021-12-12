@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import withLayout from "../../HOC/withLayout";
 import {Avatar, IconButton, InputAdornment, List, ListItem, makeStyles, Typography} from "@material-ui/core";
 import CustomInput from "../../components/CustomInput";
 import SearchIcon from '@material-ui/icons/Search';
@@ -8,6 +7,7 @@ import ShowRating from "../../components/ShowRating";
 import {useHistory} from "react-router-dom";
 import {useSearchData} from "./effects/use-search-data.effect";
 import {User} from "../../../utils/interface";
+import Spinner from "../../components/Spinner";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -83,6 +83,11 @@ const useStyles = makeStyles(theme => ({
     },
     rowList: {
         padding: 0
+    },
+    pending: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: "center"
     }
 }))
 
@@ -119,10 +124,6 @@ const SearchPage: React.FC<any> = () => {
         return <div></div>
     }
 
-    if (loading) {
-        return <div></div>
-    }
-
     return (
         <div  className={classes.root}>
             <div className={classes.card}>
@@ -150,32 +151,40 @@ const SearchPage: React.FC<any> = () => {
                     </div>
                 </div>
                 <div className={classes.body}>
-                    <List className={classes.rowList}>
-                        {state.map((item, idx) => (
-                            <ListItem
-                                className={classes.rowData}
-                                onClick={(event) => history.push(`/profile/${item.id}`)}
-                                key={idx}
-                            >
-                                <div className={classes.avatarWrapp}>
-                                    <Avatar alt={`${item.firstname} ${item.surname}`} src={item.avatar_url} className={classes.avatar}/>
-                                </div>
-                                <div className={classes.infoWrapp}>
-                                    <Typography className={classes.infoName}>{`${item.firstname} ${item.surname}`}</Typography>
-                                    <Typography className={classes.infoRole}>{item.org_status}</Typography>
-                                </div>
-                                <div className={classes.ratingWrapp}>
-                                    <ShowRating
-                                        value={+item.over_score}
-                                    />
-                                </div>
-                            </ListItem>
-                        ))}
-                    </List>
+                    {loading ?
+                        <div className={classes.pending}>
+                            <Spinner
+                                size={130}
+                            />
+                        </div>
+                        :
+                        <List className={classes.rowList}>
+                            {state.map((item, idx) => (
+                                <ListItem
+                                    className={classes.rowData}
+                                    onClick={(event) => history.push(`/profile/${item.id}`)}
+                                    key={idx}
+                                >
+                                    <div className={classes.avatarWrapp}>
+                                        <Avatar alt={`${item.firstname} ${item.surname}`} src={item.avatar_url} className={classes.avatar}/>
+                                    </div>
+                                    <div className={classes.infoWrapp}>
+                                        <Typography className={classes.infoName}>{`${item.firstname} ${item.surname}`}</Typography>
+                                        <Typography className={classes.infoRole}>{item.org_status}</Typography>
+                                    </div>
+                                    <div className={classes.ratingWrapp}>
+                                        <ShowRating
+                                            value={+item.over_score}
+                                        />
+                                    </div>
+                                </ListItem>
+                            ))}
+                        </List>
+                    }
                 </div>
             </div>
         </div>
     )
 }
 
-export default withLayout(SearchPage)
+export default SearchPage

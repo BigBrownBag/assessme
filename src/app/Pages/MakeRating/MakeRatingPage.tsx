@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {Avatar, CircularProgress, makeStyles, Typography} from "@material-ui/core";
 import CustomButton from "../../components/CustomButton";
-import withLayout from "../../HOC/withLayout";
 import {useHistory} from "react-router-dom";
 import ShowRating from "../../components/ShowRating";
 import {Autocomplete, Rating} from "@material-ui/lab";
@@ -172,4 +171,4 @@ const MakeRatingPage: React.FC<any> = () => {
     )
 }
 
-export default withLayout(MakeRatingPage)
+export default MakeRatingPage

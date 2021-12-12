@@ -8,12 +8,13 @@ export interface Organization {
 }
 
 export interface Form {
-    avatar_url?: File | null;
+    avatar_url?: string;
     email: string;
     firstname: string;
     id: number | null;
     org: Organization | null;
     org_status: string;
+    org_title: string;
     over_score: number | null;
     scores_count: string;
     surname: string;
@@ -31,6 +32,7 @@ export interface User {
     middlename: string;
     org: Organization | null;
     org_status: string;
+    org_title: string;
     over_score: number;
     reg_date: Date;
     scores_count: string;
