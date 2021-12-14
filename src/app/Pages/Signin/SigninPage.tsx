@@ -49,12 +49,12 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export interface LoginPageProps {
-    state: { login: string; password: string; };
+    state: { username: string; password: string; };
     onAuth: (params: AuthParams) => void;
-    onChange: (value: { login: string; password: string; }) => void;
+    onChange: (value: { username: string; password: string; }) => void;
 }
 
-const defaultState: AuthParams = {login: '', password: ''}
+const defaultState: AuthParams = {username: '', password: ''}
 
 const LoginPage: React.FC<LoginPageProps> = (props: LoginPageProps) => {
     const classes = useStyles()
@@ -67,8 +67,8 @@ const LoginPage: React.FC<LoginPageProps> = (props: LoginPageProps) => {
     }
 
     const handleLoginChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const login = event.target.value
-        setState(s => ({...s, login: login}))
+        const username = event.target.value
+        setState(s => ({...s, username: username}))
     }
 
     const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,7 +97,7 @@ const LoginPage: React.FC<LoginPageProps> = (props: LoginPageProps) => {
                             label="Логин"
                             autoComplete="username"
                             autoFocus
-                            value={state.login}
+                            value={state.username}
                             onChange={handleLoginChange}
                         />
                         <CustomTextField

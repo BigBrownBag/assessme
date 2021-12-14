@@ -3,7 +3,7 @@ import DataRepository from "../DataRepository";
 import {User} from "../../utils/interface";
 
 export interface AuthParams {
-    login: string;
+    username: string;
     password: string;
 }
 
@@ -33,7 +33,7 @@ export const useAuth = (params: AuthParams): Auth => {
         DataRepository.get(
             'signin',
             {
-                username: params.login,
+                username: params.username,
                 password: params.password
             }
         )

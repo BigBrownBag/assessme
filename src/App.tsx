@@ -14,7 +14,7 @@ import OrganizationPage from './app/Pages/Organization';
 import {useAuth} from "./api/Auth/auth";
 
 const App = () => {
-    const [state, setState] = useState<{ login: string; password: string; }>({login: '', password: ''})
+    const [state, setState] = useState<{ username: string; password: string; }>({username: '', password: ''})
     const {isAuth, userData, onRegistration, onAuth} = useAuth({...state})
 
     return (
