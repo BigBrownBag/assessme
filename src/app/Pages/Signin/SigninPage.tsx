@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Box, Button, Container, makeStyles} from "@material-ui/core";
 import CustomTextField from "../../components/CustomTextField";
 import CustomButton from "../../components/CustomButton";
 import {useHistory} from "react-router-dom";
+import {AuthParams} from "../../../api/Auth/auth";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -49,26 +50,30 @@ const useStyles = makeStyles(theme => ({
 
 export interface LoginPageProps {
     state: { login: string; password: string; };
+    onAuth: (params: AuthParams) => void;
     onChange: (value: { login: string; password: string; }) => void;
 }
+
+const defaultState: AuthParams = {login: '', password: ''}
 
 const LoginPage: React.FC<LoginPageProps> = (props: LoginPageProps) => {
     const classes = useStyles()
     const history = useHistory()
+    const [state, setState] = useState<AuthParams>(defaultState)
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        console.log()
+        props.onAuth(state)
     }
 
     const handleLoginChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const login = event.target.value
-        props.onChange({...props.state, login: login})
+        setState(s => ({...s, login: login}))
     }
 
     const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const password = event.target.value
-        props.onChange({...props.state, password: password})
+        setState(s => ({...s, password: password}))
     }
 
     return (
@@ -83,18 +88,16 @@ const LoginPage: React.FC<LoginPageProps> = (props: LoginPageProps) => {
                         </div>
                     </div>
 
-                    <form onSubmit={handleSubmit} noValidate className={classes.form}>
+                    <form onSubmit={handleSubmit} className={classes.form}>
                         <CustomTextField
                             className={classes.field}
                             required
                             fullWidth
                             id="username"
                             label="Логин"
-                            name="username"
                             autoComplete="username"
-                            type="text"
                             autoFocus
-                            value={props.state.login}
+                            value={state.login}
                             onChange={handleLoginChange}
                         />
                         <CustomTextField
@@ -106,7 +109,7 @@ const LoginPage: React.FC<LoginPageProps> = (props: LoginPageProps) => {
                             type="password"
                             id="password"
                             autoComplete="current-password"
-                            value={props.state.password}
+                            value={state.password}
                             onChange={handlePasswordChange}
                         />
                         <CustomButton

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Box, Container, makeStyles} from "@material-ui/core";
 import CustomTextField from "../../components/CustomTextField";
 import CustomButton from "../../components/CustomButton";
+import {RegistrationForm} from "../../../api/Auth/auth";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -36,7 +37,7 @@ const useStyles = makeStyles(theme => ({
         alignItems: 'center',
     },
     field: {
-        marginBottom: 16
+        marginBottom: 32
     }
 }))
 
@@ -57,13 +58,6 @@ const fields = [
         label: 'Имя',
         name: 'firstname',
         autoComplete: 'firstname',
-        type: 'text'
-    },
-    {
-        id: 'middlename',
-        label: 'Отчество',
-        name: 'middlename',
-        autoComplete: 'middlename',
         type: 'text'
     },
     {
@@ -88,19 +82,36 @@ const fields = [
         type: 'password'
     },
     {
-        id: 'passwordRepeat',
+        id: 'repeatPassword',
         label: 'Повторите пароль',
-        name: 'passwordRepeat',
+        name: 'repeatPassword',
         autoComplete: 'current-password',
         type: 'password'
     }
 ]
 
+const defaultForm: RegistrationForm = {
+    surname: '',
+    firstname: '',
+    email: '',
+    password: '',
+    repeatPassword: '',
+    username: ''
+}
+
 export const RegistrationPage: React.FC<RegistrationProps> = (props: RegistrationProps) => {
     const classes = useStyles()
+    const [form, setForm] = useState<RegistrationForm>(defaultForm);
+    const [error, setError] = useState<boolean>(false)
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
+        console.log(form.password, form.repeatPassword)
+        if (form.password === form.repeatPassword) {
+            props.onRegistration(form)
+        } else {
+            setError(true)
+        }
     }
 
     return (
@@ -115,7 +126,7 @@ export const RegistrationPage: React.FC<RegistrationProps> = (props: Registratio
                         </div>
                     </div>
 
-                    <form onSubmit={handleSubmit} noValidate className={classes.form}>
+                    <form onSubmit={handleSubmit} className={classes.form}>
                         {fields.map((field, idx) => (
                             <CustomTextField
                                 key={idx}
@@ -125,9 +136,12 @@ export const RegistrationPage: React.FC<RegistrationProps> = (props: Registratio
                                 id={field.id}
                                 label={field.label}
                                 name={field.name}
+                                value={form[field.name as keyof RegistrationForm]}
+                                onChange={(event) => setForm(f => ({...f, [field.name]: event.target.value}))}
                                 autoComplete={field.autoComplete}
                                 autoFocus={idx === 0}
                                 type={field.type}
+                                error={field.type === 'password' ? error : false}
                             />
                         ))}
                         <CustomButton

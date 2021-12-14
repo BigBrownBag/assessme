@@ -2,7 +2,7 @@ import {useCallback, useEffect, useState} from "react";
 import DataRepository from "../DataRepository";
 import {User} from "../../utils/interface";
 
-interface AuthParams {
+export interface AuthParams {
     login: string;
     password: string;
 }
@@ -11,7 +11,17 @@ interface Auth {
     isAuth: boolean;
     error: boolean;
     userData: User | null;
-    onRegistration: (body: any) => void;
+    onAuth: (params: AuthParams) => void;
+    onRegistration: (body: RegistrationForm) => void;
+}
+
+export interface RegistrationForm {
+    surname: string;
+    firstname: string;
+    email: string;
+    username: string;
+    password: string;
+    repeatPassword: string;
 }
 
 export const useAuth = (params: AuthParams): Auth => {
@@ -33,9 +43,20 @@ export const useAuth = (params: AuthParams): Auth => {
                 setUserData(data)
             })
             .catch(err => setError(true))
-    }, [params])
+    }, [])
 
-    const onRegistration = useCallback((body: any) => {
+    const onAuth = useCallback((body: AuthParams) => {
+        DataRepository.post(
+            'signin',
+            {...body}
+        )
+            .then(res => {
+                console.log(res)
+                setIsAuth(true)
+            })
+    }, [])
+
+    const onRegistration = useCallback((body: RegistrationForm) => {
         DataRepository.post(
             'signup',
             {
@@ -46,6 +67,7 @@ export const useAuth = (params: AuthParams): Auth => {
                 password: body.password
             }
         )
+            .then(res => console.log(res))
     }, [])
 
     const onPasswordForget = useCallback((email: string) => {
@@ -56,6 +78,7 @@ export const useAuth = (params: AuthParams): Auth => {
         isAuth,
         userData,
         error,
+        onAuth,
         onRegistration
     }
 }

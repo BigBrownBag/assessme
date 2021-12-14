@@ -86,7 +86,7 @@ export default function ForgetPassPage(props: ForgetPassProps) {
                           className={classes.btn}
                           type="submit"
                       >
-                          Войти
+                          Отправить письмо на почту
                       </CustomButton>
                   </form>
               </Box>

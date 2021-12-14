@@ -15,7 +15,7 @@ import {useAuth} from "./api/Auth/auth";
 
 const App = () => {
     const [state, setState] = useState<{ login: string; password: string; }>({login: '', password: ''})
-    const {isAuth, userData, onRegistration} = useAuth({...state})
+    const {isAuth, userData, onRegistration, onAuth} = useAuth({...state})
 
     return (
         <LayoutPage isAuth={isAuth} userData={userData}>
@@ -35,7 +35,7 @@ const App = () => {
                     <>
                         <Route exact path="/forget" component={() => <ForgetPage />} />
                         <Route exact path="/registration" component={() => <Registration onRegistration={onRegistration}/>}/>
-                        <Route exact path="/login" component={() => <Login state={state} onChange={(value) => setState(value)}/>}/>
+                        <Route exact path="/login" component={() => <Login state={state} onChange={(value) => setState(value)} onAuth={onAuth}/>}/>
                         <Redirect from="*" to="/login" />
                     </>
                 }
