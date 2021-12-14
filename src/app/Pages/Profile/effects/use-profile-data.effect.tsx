@@ -2,6 +2,7 @@ import {useCallback, useEffect, useState} from "react";
 import {abortController} from "../../../../utils/abort";
 import DataRepository from "../../../../api/DataRepository";
 import {Form, User} from "../../../../utils/interface";
+import getHeader from "../../../../api/Auth/auth";
 
 interface ProfileDataProps {
     id: string | number | undefined;
@@ -23,7 +24,8 @@ interface ProfileDataProps {
      const onProfileChange = useCallback((body: Form) => {
          DataRepository.post(
              `updateProfile/${params.id}`,
-             body
+             body,
+             getHeader()
          )
              .then((res) => {
                  setSyncTime(Date.now())
@@ -37,12 +39,12 @@ interface ProfileDataProps {
          if (!params.id) {
              return;
          }
-         const controller = abortController()
          setLoading(true)
 
          DataRepository.get(
              `user/${params.id}`,
-             {signal: controller.signal}
+             {},
+             getHeader()
          )
              .then(res => {
                  const data = res.data
@@ -55,8 +57,6 @@ interface ProfileDataProps {
              })
              .catch(err => setError(err))
              .finally(() => setLoading(false))
-
-         return () => controller.abort()
      }, [params.id, syncTime])
 
     return {

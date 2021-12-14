@@ -1,7 +1,7 @@
 import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
 
 export const BASE_URL: string = 'localhost:3000'
-const root = 'https://assessme.paulislava.space'
+const root = 'https://api.assessme.paulislava.space'
 
 class DataRepository {
     constructor(private readonly root: string) {

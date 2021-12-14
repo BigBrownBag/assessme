@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import DataRepository from "../../../../api/DataRepository";
 import {abortController} from "../../../../utils/abort";
 import {User} from "../../../../utils/interface";
+import getHeader from "../../../../api/Auth/auth";
 
 interface SearchData {
     data: User[];
@@ -20,7 +21,8 @@ export const useSearchData = (): SearchData => {
 
         DataRepository.get(
             'users',
-            {signal: controller.signal}
+            {},
+            getHeader()
         )
             .then(res => {
                 const data = res.data
@@ -30,7 +32,7 @@ export const useSearchData = (): SearchData => {
             .finally(() => setLoading(false))
         return () => controller.abort()
     }, [])
-    console.log(data)
+
     return {
         data,
         error,

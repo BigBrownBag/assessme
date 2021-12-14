@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
 
 export interface LoginPageProps {
     state: { username: string; password: string; };
-    onAuth: (params: AuthParams) => void;
+    onLogin: (params: AuthParams) => void;
     onChange: (value: { username: string; password: string; }) => void;
 }
 
@@ -63,7 +63,7 @@ const LoginPage: React.FC<LoginPageProps> = (props: LoginPageProps) => {
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        props.onAuth(state)
+        props.onLogin(state)
     }
 
     const handleLoginChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Avatar, Drawer, List, ListItem, Typography} from '@material-ui/core';
+import {Avatar, Button, Drawer, List, ListItem, Typography} from '@material-ui/core';
 import {makeStyles} from "@material-ui/core";
 import {Link} from 'react-router-dom';
 import clsx from 'clsx';
@@ -55,12 +55,14 @@ const useStyles = makeStyles((theme) => ({
         marginTop: 12,
         fontWeight: 500,
         fontSize: 16
-    }
+    },
+    btn: {}
 }))
 
 export interface NavbarProps {
     user: User | null;
     isAuth: boolean;
+    onLogout: () => void;
 }
 
 interface Lnk {
@@ -116,14 +118,14 @@ const links: Lnk[] = [
     {
         title: 'Выйти',
         icon: 'logout',
-        to: '/',
+        to: '/logout',
         admin: false
     }
 ];
 
 const Navbar: React.FC<NavbarProps> = (props: NavbarProps) => {
     const classes = useStyles()
-    const { user } = props
+    const { user, onLogout, isAuth } = props
 
     return (
         <Drawer
@@ -138,7 +140,7 @@ const Navbar: React.FC<NavbarProps> = (props: NavbarProps) => {
                     </div>
                 </div>
 
-                {props.isAuth ?
+                {isAuth ?
                     <>
                         <div className={classes.avatarWrapper}>
                             <Avatar alt="Remy Sharp" src={user?.avatar_url} className={classes.avatar}/>
@@ -149,12 +151,21 @@ const Navbar: React.FC<NavbarProps> = (props: NavbarProps) => {
                         <List>
                             { links.map((item, idx) => (
                                     <ListItem key={idx} className={classes.link}>
-                                        <Link to={item.to} className="w-full flex flex-row">
-                                <span className={clsx("material-icons", "pr-4", classes.icon)}>
-                                    {item.icon}
-                                </span>
-                                            <Typography variant="body1" className={classes.title}>{item.title}</Typography>
-                                        </Link>
+                                        {item.to !== '/logout' ?
+                                            <Link to={item.to} className="w-full flex flex-row">
+                                                <span className={clsx("material-icons", "pr-4", classes.icon)}>
+                                                    {item.icon}
+                                                </span>
+                                                <Typography variant="body1" className={classes.title}>{item.title}</Typography>
+                                            </Link>
+                                            :
+                                            <Button
+                                                onClick={event => onLogout()}
+                                                className={classes.btn}
+                                            >
+                                                {item.title}
+                                            </Button>
+                                        }
                                     </ListItem>
                                 )
                             )}

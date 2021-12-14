@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import DataRepository from "../../../../api/DataRepository";
+import getHeader from "../../../../api/Auth/auth";
 
 interface MonthChartDataParams {
     userId: string | number | undefined;
@@ -54,7 +55,9 @@ export const useChartData = (params: MonthChartDataParams): ChartData => {
         setWeekPending(true)
 
         DataRepository.get(
-            `lastMonthRates/${params.userId}`
+            `lastMonthRates/${params.userId}`,
+            {},
+            getHeader()
         )
             .then((res) => {
                 const newData = res.data
@@ -64,7 +67,9 @@ export const useChartData = (params: MonthChartDataParams): ChartData => {
             .finally(() => setMonthPending(false))
 
         DataRepository.get(
-            `userRates/${params.userId}`
+            `userRates/${params.userId}`,
+            {},
+            getHeader()
         )
             .then((res) => {
                 const newData = res.data
@@ -74,7 +79,9 @@ export const useChartData = (params: MonthChartDataParams): ChartData => {
             .finally(() => setWeekPending(false))
 
         DataRepository.get(
-            `scoresCountByDays/${params.userId}`
+            `scoresCountByDays/${params.userId}`,
+            {},
+            getHeader()
         )
             .then((res) => {
                 const newData = res.data
