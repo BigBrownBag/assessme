@@ -134,7 +134,7 @@ const links: Lnk[] = [
     {
         title: 'Виджет',
         icon: 'logout',
-        to: '/widjet',
+        to: '/widjet/8',
         admin: false
     }
 ];

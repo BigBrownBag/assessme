@@ -30,11 +30,11 @@ const App = () => {
                         <Route exact path="/rate/:userId" component={MakeRatingPage} />
                         <Route exact path="/event" component={EventPage} />
                         <Route exact path="/organization" component={OrganizationPage} />
+                        <Route exact path="/widjet/:id" component={WidjetPage} />
                         <Redirect from="*" to="/" />
                     </>
                     :
                     <>
-                        <Route exact path="/widjet/:id" component={WidjetPage}  />
                         <Route exact path="/forget" component={() => <ForgetPage />} />
                         <Route exact path="/registration" component={() => <Registration onRegistration={onRegistration}/>}/>
                         <Route exact path="/login" component={() => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin}/>}/>

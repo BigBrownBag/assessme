@@ -1,2 +1,2 @@
-import WidjetPage from './WidjetPage';
+import WidjetPage from "./WidjetPage";
 export default WidjetPage;
