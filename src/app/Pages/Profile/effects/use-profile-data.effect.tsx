@@ -1,5 +1,4 @@
 import {useCallback, useEffect, useState} from "react";
-import {abortController} from "../../../../utils/abort";
 import DataRepository from "../../../../api/DataRepository";
 import {Form, User} from "../../../../utils/interface";
 import getHeader from "../../../../api/Auth/auth";
@@ -24,7 +23,13 @@ interface ProfileDataProps {
      const onProfileChange = useCallback((body: Form) => {
          DataRepository.post(
              `updateProfile/${params.id}`,
-             body,
+             {
+                 id: body.id,
+                 username: body.username,
+                 firstname: body.firstname,
+                 surname: body.surname,
+                 email: body.email
+             },
              getHeader()
          )
              .then((res) => {

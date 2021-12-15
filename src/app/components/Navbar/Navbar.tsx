@@ -48,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
             },
             '& $title': {
                 color: '#2196F3'
+            },
+            '& $btn': {
+            color: '#2196F3'
             }
         }
     },
@@ -56,7 +59,14 @@ const useStyles = makeStyles((theme) => ({
         fontWeight: 500,
         fontSize: 16
     },
-    btn: {}
+    btn: {
+        height: 24,
+        display: "flex",
+        justifyContent: 'start',
+        '&:hover': {
+            background: 'transparent'
+        }
+    }
 }))
 
 export interface NavbarProps {
@@ -160,6 +170,13 @@ const Navbar: React.FC<NavbarProps> = (props: NavbarProps) => {
                                             </Link>
                                             :
                                             <Button
+                                                startIcon={
+                                                    <span className={clsx("material-icons", "pr-4", classes.icon)}>
+                                                        {item.icon}
+                                                    </span>
+                                                }
+                                                disableRipple
+                                                fullWidth
                                                 onClick={event => onLogout()}
                                                 className={classes.btn}
                                             >

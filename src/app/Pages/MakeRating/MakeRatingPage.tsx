@@ -1,12 +1,14 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import {Avatar, CircularProgress, makeStyles, Typography} from "@material-ui/core";
 import CustomButton from "../../components/CustomButton";
-import {useHistory} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 import ShowRating from "../../components/ShowRating";
 import {Autocomplete, Rating} from "@material-ui/lab";
 import clsx from "clsx";
 import CustomTextField from "../../components/CustomTextField";
 import {Subject, useAutocomplete} from "./effects/use-autocomplete.effect";
+import {useRateData} from "./effects/use-rate-data.effect";
+import Spinner from "../../components/Spinner";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -80,18 +82,17 @@ const useStyles = makeStyles(theme => ({
 const MakeRatingPage: React.FC<any> = () => {
     const classes = useStyles()
     const history = useHistory()
+    const {userId} = useParams() as any
     const [valueRating, setValueRating] = useState<number | null>(0)
     const [currentSubject, setCurrentSubject] = useState<Subject | null>(null)
-    const {loading, options, open, setOpen} = useAutocomplete()
+    const {data, loading, onMakeRate} = useRateData({userId})
+    const {pending, options, open, setOpen} = useAutocomplete()
 
-    const testUser: any = {
-        name: 'Иван',
-        role: 'Преподаватель',
-        surname: 'Иванов',
-        rating: 5.5
+    const handleSend = (event: React.MouseEvent<HTMLButtonElement>) => {
+        if (valueRating && data) {
+            onMakeRate(valueRating, data.id)
+        }
     }
-
-    const handleSend = (event: React.MouseEvent<HTMLButtonElement>) => {}
 
     return (
         <div>
@@ -99,55 +100,64 @@ const MakeRatingPage: React.FC<any> = () => {
                 <div className={classes.card}>
                     <div className={classes.header}><Typography className={classes.title}>Оценить</Typography></div>
                     <div className={classes.body}>
-                        <div className={classes.avatarWrapper}>
-                            <Avatar alt={`${testUser.name} ${testUser.surname}`} src="https://v4.mui.com/static/images/avatar/2.jpg" className={classes.avatar}/>
-                            <Typography className={classes.primaryText}>{`${testUser.name} ${testUser.surname}`}</Typography>
-                        </div>
-                        <ShowRating
-                            className={classes.currentRating}
-                            value={+testUser.rating}
-                        />
-                        <Autocomplete
-                            id="combo-box"
-                            style={{width: 400}}
-                            options={options}
-                            open={open}
-                            onOpen={() => {
-                                setOpen(true);
-                            }}
-                            onClose={() => {
-                                setOpen(false);
-                            }}
-                            noOptionsText='Нет доступных вариантов'
-                            onChange={(event, option) => setCurrentSubject(option)}
-                            getOptionLabel={(option) => option.title}
-                            getOptionSelected={(option, value) => option.title === value.title}
-                            loading={loading}
-                            renderInput={(params) =>
-                                <CustomTextField
-                                    {...params}
-                                    label="Событие"
-                                    variant="standard"
-                                    required={true}
-                                    InputProps={{
-                                        ...params.InputProps,
-                                        endAdornment:
-                                            <>
-                                                {loading ? <CircularProgress color="inherit" size={20}/> : params.InputProps.endAdornment}
-                                            </>
-                                    }}
+                        {loading ?
+                            <Spinner
+                                size={150}
+                            />
+                            :
+                            <>
+                                <div className={classes.avatarWrapper}>
+                                    <Avatar alt={`${data?.firstname} ${data?.surname}`} src={data?.avatar_url} className={classes.avatar}/>
+                                    <Typography className={classes.primaryText}>{`${data?.firstname} ${data?.surname}`}</Typography>
+                                </div>
+                                <ShowRating
+                                    className={classes.currentRating}
+                                    value={+(data?.over_score || 0)}
                                 />
-                            }
-                        />
-                        <Typography className={clsx('pt-4', classes.secondaryText)}>Оценить</Typography>
-                        <Rating
-                            className={classes.ratingIcon}
-                            name="simple-controlled"
-                            size="large"
-                            max={5}
-                            value={valueRating}
-                            onChange={(event, newValue) => setValueRating(newValue)}
-                        />
+                                <Autocomplete
+                                    disabled
+                                    id="combo-box"
+                                    style={{width: 400}}
+                                    options={options}
+                                    open={open}
+                                    onOpen={() => {
+                                        setOpen(true);
+                                    }}
+                                    onClose={() => {
+                                        setOpen(false);
+                                    }}
+                                    noOptionsText='Нет доступных вариантов'
+                                    onChange={(event, option) => setCurrentSubject(option)}
+                                    getOptionLabel={(option) => option.title}
+                                    getOptionSelected={(option, value) => option.title === value.title}
+                                    loading={pending}
+                                    renderInput={(params) =>
+                                        <CustomTextField
+                                            {...params}
+                                            label="Событие"
+                                            variant="standard"
+                                            required={true}
+                                            InputProps={{
+                                                ...params.InputProps,
+                                                endAdornment:
+                                                    <>
+                                                        {loading ? <CircularProgress color="inherit" size={20}/> : params.InputProps.endAdornment}
+                                                    </>
+                                            }}
+                                        />
+                                    }
+                                />
+                                <Typography className={clsx('pt-4', classes.secondaryText)}>Оценить</Typography>
+                                <Rating
+                                    className={classes.ratingIcon}
+                                    name="simple-controlled"
+                                    size="large"
+                                    max={5}
+                                    value={valueRating}
+                                    onChange={(event, newValue) => setValueRating(newValue)}
+                                />
+                            </>
+                        }
                     </div>
 
                     <div className={classes.btnGroup}>
@@ -159,6 +169,7 @@ const MakeRatingPage: React.FC<any> = () => {
                                 Назад
                             </CustomButton>
                             <CustomButton
+                                disabled={!valueRating}
                                 onClick={handleSend}
                             >
                                 Отправить

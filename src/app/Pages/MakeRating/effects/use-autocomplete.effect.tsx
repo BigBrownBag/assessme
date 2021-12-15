@@ -7,7 +7,7 @@ export interface Subject {
 
 interface Autocomplete {
     open: boolean;
-    loading: boolean;
+    pending: boolean;
     options: Subject[];
     setOpen: React.Dispatch<SetStateAction<boolean>>;
 }
@@ -29,17 +29,17 @@ const subjects: Subject[] = [
 
 export const useAutocomplete = (): Autocomplete => {
     const [open, setOpen] = useState<boolean>(false)
-    const [loading, setLoading] = useState<boolean>(true)
+    const [pending, setPending] = useState<boolean>(true)
     const [options, setOptions] = useState<Subject[]>(subjects)
 
     setTimeout(() => {
-        setLoading(false)
+        setPending(false)
         setOptions(subjects)
     }, 2000)
 
     return {
         open,
-        loading,
+        pending,
         options,
         setOpen
     }
