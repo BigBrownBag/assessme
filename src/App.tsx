@@ -12,6 +12,7 @@ import ForgetPage from './app/Pages/ForgetPass';
 import EventPage from './app/Pages/Event/EventPage';
 import OrganizationPage from './app/Pages/Organization';
 import {useAuth} from "./api/Auth/auth";
+import WidjetPage from './app/Pages/Widjet';
 
 const App = () => {
     const [state, setState] = useState<{ username: string; password: string; }>({username: '', password: ''})
@@ -33,6 +34,7 @@ const App = () => {
                     </>
                     :
                     <>
+                        <Route exact path="/widjet/:id" component={WidjetPage}  />
                         <Route exact path="/forget" component={() => <ForgetPage />} />
                         <Route exact path="/registration" component={() => <Registration onRegistration={onRegistration}/>}/>
                         <Route exact path="/login" component={() => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin}/>}/>

@@ -120,6 +120,12 @@ const links: Lnk[] = [
         icon: 'logout',
         to: '/logout',
         admin: false
+    },
+    {
+        title: 'Виджет',
+        icon: 'logout',
+        to: '/widjet',
+        admin: false
     }
 ];
 
