@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     body: {
         padding: '32px 48px',
         display: 'flex',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
     },
     name: {
         color: '#FFF',
@@ -38,8 +38,9 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'column',
-        height: 230,
-        width: 220
+        //height: 230,
+        width: 220,
+        padding: '64px 32px 0 0'
     },
     avatar: {
         width: 128,
@@ -106,10 +107,6 @@ const fields: Field[] = [
     {
         field: 'Роль',
         fieldProperty: 'org_status'
-    },
-    {
-        field: 'Организация',
-        fieldProperty: 'org'
     }
 ]
 
@@ -168,7 +165,7 @@ const ProfilePage: React.FC<any> = (props) => {
                                     {fields.map((item, idx) => (
                                         <ListItem className={classes.field} key={idx}>
                                             <Typography className={classes.filedTitle}>{item.field}</Typography>
-                                            <Typography className={classes.fieldDesc}>{item.fieldProperty !== 'org' ? data?.[item.fieldProperty as keyof User] : data?.org?.title || 'Не указано'}</Typography>
+                                            <Typography className={classes.fieldDesc}>{data?.[item.fieldProperty as keyof User]}</Typography>
                                         </ListItem>
                                     ))}
                                 </List>
@@ -186,7 +183,7 @@ const ProfilePage: React.FC<any> = (props) => {
                             Назад
                         </CustomButton>
                         <CustomButton
-                            onClick={(event) => history.push('/rate')}
+                            onClick={(event) => history.push(`/rate/${params['userId']}`)}
                         >
                             Оценить
                         </CustomButton>

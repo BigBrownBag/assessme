@@ -186,7 +186,7 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
                         <div>
                             <img src={notif} alt="notif"/>
                         </div>
-                        <Typography>2</Typography>
+                        <Typography>-</Typography>
                         <Typography className={classes.notificationsTitle}>Уведомления</Typography>
                     </div>
                     <div className={classes.notifications}>
@@ -210,19 +210,21 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
                             thickness={3}
                         />
                         :
-                        data.monthData &&
-                        <Chart
-                            data={monthData}
-                            height={300}
-                        >
-                            <ArgumentAxis />
-                            <ValueAxis />
-                            <SplineSeries
-                                name="spline"
-                                valueField="score"
-                                argumentField="date"
-                            />
-                        </Chart>
+                        data.monthData ?
+                            <Chart
+                                data={monthData}
+                                height={300}
+                            >
+                                <ArgumentAxis />
+                                <ValueAxis />
+                                <SplineSeries
+                                    name="spline"
+                                    valueField="score"
+                                    argumentField="date"
+                                />
+                            </Chart>
+                            :
+                            <Typography className={classes.statisticsTitle}>Оценок еще нет</Typography>
                     }
                 </div>
             </div>
@@ -235,22 +237,25 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
                             thickness={3}
                         />
                         :
-                        data.weekData &&
-                        <Chart
-                            data={weekData}
-                            height={166}
-                        >
-                            <ArgumentAxis />
-                            <BarSeries
-                                valueField="cnt"
-                                argumentField="date"
-                            />
-                        </Chart>
+                        data.weekData ?
+                            <Chart
+                                data={weekData}
+                                height={166}
+                            >
+                                <ArgumentAxis />
+                                <BarSeries
+                                    valueField="cnt"
+                                    argumentField="date"
+                                />
+                            </Chart>
+                            :
+                            <Typography className={classes.statisticsTitle}>Оценок еще нет</Typography>
                     }
                 </div> 
                 <List className={classes.rowList}>
                     <Typography className={classes.statisticsTitle}>Последние оценки</Typography>
-                    {data.ratesData?.map((item, idx) => (
+                    {data.ratesData ?
+                        data.ratesData?.map((item, idx) => (
                         <ListItem
                             className={classes.rowData}
                             onClick={() => history.push(`/profile/${item.rater.id}`)}
@@ -269,8 +274,10 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
                                     value={+item.score}
                                 />
                             </div>
-                        </ListItem>
-                    ))}
+                        </ListItem>))
+                        :
+                        <Typography className={classes.statisticsTitle}>Оценок еще нет</Typography>
+                    }
                     </List>
             </div>
         </div>
