@@ -19,30 +19,33 @@ const App = () => {
     const {isAuth, userData, onRegistration, onLogin, onLogout} = useAuth({...state})
 
     return (
-        <LayoutPage isAuth={isAuth} userData={userData} onLogout={onLogout}>
-            <Switch>
-                {isAuth ?
-                    <>
-                        <Route exact path="/"  component={() => <MainPage userData={userData}/>}/>
-                        <Route exact path="/search" component={SearchPage} />
-                        <Route exact path="/settings" component={() => <SettingsPage userData={userData}/>}/>
-                        <Route exact path="/profile/:userId" component={ProfilePage} />
-                        <Route exact path="/rate/:userId" component={MakeRatingPage} />
-                        <Route exact path="/event" component={EventPage} />
-                        <Route exact path="/organization" component={OrganizationPage} />
-                        <Route exact path="/widjet/:id" component={WidjetPage} />
-                        <Redirect from="*" to="/" />
-                    </>
-                    :
-                    <>
-                        <Route exact path="/forget" component={() => <ForgetPage />} />
-                        <Route exact path="/registration" component={() => <Registration onRegistration={onRegistration}/>}/>
-                        <Route exact path="/login" component={() => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin}/>}/>
-                        <Redirect from="*" to="/login" />
-                    </>
-                }
-            </Switch>
-        </LayoutPage>
+        <Switch>
+            <Route exact path="/">
+                <LayoutPage isAuth={isAuth} userData={userData} onLogout={onLogout}>
+                    <Switch>
+                        {isAuth ?
+                            <>
+                                <Route exact path="/" component={() => <MainPage userData={userData} />} />
+                                <Route exact path="/search" component={SearchPage} />
+                                <Route exact path="/settings" component={() => <SettingsPage userData={userData} />} />
+                                <Route exact path="/profile/:userId" component={ProfilePage} />
+                                <Route exact path="/rate/:userId" component={MakeRatingPage} />
+                                <Route exact path="/event" component={EventPage} />
+                                <Route exact path="/organization" component={OrganizationPage} />
+                                <Redirect from="*" to="/" />
+                            </>
+                            :
+                            <>
+                                <Route exact path="/forget" component={() => <ForgetPage />} />
+                                <Route exact path="/registration" component={() => <Registration onRegistration={onRegistration} />} />
+                                <Route exact path="/login" component={() => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} />} />
+                                <Redirect from="*" to="/login" />
+                            </>}
+                    </Switch>
+                </LayoutPage>
+            </Route>
+            <Route exact path="/widjet/:id" component={WidjetPage} />
+        </Switch>
     )
 }
 

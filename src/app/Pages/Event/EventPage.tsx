@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState}  from 'react';
 import {makeStyles} from "@material-ui/core";
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -18,6 +18,9 @@ import CopyAllIcon from '@mui/icons-material/CopyAll';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
+import {useSearchData} from "./effects/use-search-data.effect";
+import {Event} from "../../../utils/interface";
+import dateFormat from 'dateformat';
 
 export interface EventPageProps {}
 
@@ -45,36 +48,22 @@ const useStyles = makeStyles(theme => ({
 const columns = [
     { id: 'title', label: 'Название', minWidth: 170 },
     { id: 'date', label: 'Дата', minWidth: 100 },
-    { id: 'score ', label: 'Оценка', minWidth: 100 },
+    { id: 'over_score ', label: 'Оценка', minWidth: 100 },
+    { id: 'scores_count ', label: 'Количество оценок', minWidth: 100 },
     { id: 'btns', label: '', minWidth: 10 },
 ];
   
-const rows = [
-    {title: 'Событие 1', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-    {title: 'Событие 2', date: '2021-01-01', score: 0, link: 'www', excel: 'trr' },
-];
 
 export const EventPage: React.FC<EventPageProps> = (props: EventPageProps) => {
     const classes = useStyles()
     const [open, setOpen] = React.useState(false);
     const [edit, setEdit] = React.useState(false);
+    const [state, setState] = useState<Event[]>([])
+    const {data, error, loading} = useSearchData()
+
+    useEffect(() => {
+        setState(data)
+    }, [data])
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -91,7 +80,7 @@ export const EventPage: React.FC<EventPageProps> = (props: EventPageProps) => {
     const handleCloseEdit = () => {
         setEdit(false);
     };
-
+    console.log(data)
     return (
         <div className={classes.root}>
             <Dialog open={open} onClose={handleClose}>
@@ -170,11 +159,12 @@ export const EventPage: React.FC<EventPageProps> = (props: EventPageProps) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
+                    {data.map((row) => (
                         <TableRow key={row.title}>
                             <TableCell className={classes.tableCell} align="center">{row.title}</TableCell>
-                            <TableCell className={classes.tableCell} align="center">{row.date}</TableCell>
-                            <TableCell className={classes.tableCell} align="center">{row.score}</TableCell>
+                            <TableCell className={classes.tableCell} align="center">{dateFormat(row.date, "yyyy-mm-dd")}</TableCell>
+                            <TableCell className={classes.tableCell} align="center">{row.over_score}</TableCell>
+                            <TableCell className={classes.tableCell} align="center">{row.scores_count}</TableCell>
                             <TableCell className={classes.tableCell} align="center">
                                 <IconButton aria-label="download">
                                     <DownloadIcon/>

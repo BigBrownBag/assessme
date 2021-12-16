@@ -67,11 +67,11 @@ const WidjetPage: React.FC<any> = (props) => {
     }, [userData])
 
     if (error) {
-        return <div></div>
+        return null
     }
 
     return (
-        <div  className={classes.root}>
+        <div className={classes.root}>
             {loading ?
                 <Spinner
                 size={200}

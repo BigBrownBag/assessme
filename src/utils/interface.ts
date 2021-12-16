@@ -1,3 +1,5 @@
+import { NumberLiteralType } from "typescript";
+
 export interface Organization {
     id: number | null;
     create_date: Date | null;
@@ -39,4 +41,14 @@ export interface User {
     surname: string;
     username: string;
     notification: number;
+}
+
+export interface Event {
+    id: number;
+    title: string;
+    date: Date;
+    create_date: Date;
+    factor: number;
+    scores_count: number;
+    over_score: number;
 }
