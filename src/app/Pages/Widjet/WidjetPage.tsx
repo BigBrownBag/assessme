@@ -75,21 +75,25 @@ const WidjetPage: React.FC<any> = (props) => {
             {loading ?
                 <Spinner
                 size={200}
-                thickness={3}
+               thickness={3}
             />
             :
             <>
                 <div className={classes.widjet}>
-                            <Avatar alt={`${data?.firstname} ${data?.surname}`} src={data?.avatar_url} className={classes.avatar}/>
+                            <Avatar alt={`${data?.firstname || ''} ${data?.surname || ''}`} src={data?.avatar_url || ''} className={classes.avatar}/>
                             <Typography className={classes.header}>{`${data?.firstname || ''} ${data?.surname || ''}`}</Typography>
-                            <Typography className={classes.org}>{`${data?.org || '-'}`}</Typography>
+                            {data?.org != null ?
+                                <Typography className={classes.org}>{`${data?.org || '-'}`}</Typography>
+                            : 
+                            <></>
+                            }
                             <div className={classes.ratingWrapp}>
                                     <ShowRating
-                                        value={+(data?.over_score || 0)}
+                                        value={+(data?.over_score.toFixed(2) || 0)}
                                     />
                             </div>
-                            <CustomButton
-                            onClick={(event) => history.push(`/rate/${params['id']}`)}
+                            <CustomButton style={{marginTop: 8}}
+                            onClick={(event) => window.open(`/#/rate/${params['id']}`)}
                             >
                                 Оценить
                             </CustomButton>

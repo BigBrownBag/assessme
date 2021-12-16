@@ -174,7 +174,7 @@ const SearchPage: React.FC<any> = () => {
                                     </div>
                                     <div className={classes.ratingWrapp}>
                                         <ShowRating
-                                            value={+item.over_score}
+                                            value={+item.over_score.toFixed(2)}
                                         />
                                     </div>
                                 </ListItem>

@@ -123,10 +123,6 @@ const ProfilePage: React.FC<any> = (props) => {
         }
     }, [userData])
 
-    const handleProfileCopy = (event: React.MouseEvent<HTMLButtonElement>) => {
-        navigator.clipboard.writeText(BASE_URL + history.location.pathname)
-    }
-
     if (error) {
         return <div></div>
     }
@@ -145,17 +141,10 @@ const ProfilePage: React.FC<any> = (props) => {
                         <>
                             <div className={classes.avatarWrapper}>
                                 <Avatar alt={`${data?.firstname} ${data?.surname}`} src={data?.avatar_url} className={classes.avatar}/>
-                                <Button
-                                    className={classes.photoBtn}
-                                    onClick={handleProfileCopy}
-                                    disableRipple
-                                >
-                                    Копировать профиль
-                                </Button>
 
                                 <div className={classes.ratingWrapp}>
                                     <ShowRating
-                                        value={+(data?.over_score || 0)}
+                                        value={+(data?.over_score.toFixed(2) || 0)}
                                     />
                                 </div>
                             </div>

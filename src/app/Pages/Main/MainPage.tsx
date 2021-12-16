@@ -1,5 +1,5 @@
 import React, {useMemo} from 'react';
-import {Avatar, List, ListItem, makeStyles, Typography} from "@material-ui/core";
+import {Avatar, List, ListItem, makeStyles, Typography, Button,} from "@material-ui/core";
 import avatars from '../../../img/avatars.svg';
 import notif from '../../../img/notif.svg';
 import problem from '../../../img/problem.svg';
@@ -15,6 +15,7 @@ import {
 import {useChartData} from "./effects/use-chart-data.effect";
 import Spinner from "../../components/Spinner";
 import {User} from "../../../utils/interface";
+import {BASE_URL} from "../../../api/DataRepository";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -140,6 +141,25 @@ const useStyles = makeStyles(theme => ({
         padding: 24,
         marginTop: 64,
         height: 150
+    },
+    myWidjet: {
+        border: '1px solid #2196F3',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        borderRadius: 32,
+        padding: 24,
+        marginTop: 64,
+        height: 150
+    },
+    photoBtn: {
+        marginTop: 16,
+        '&:hover': {
+            background: 'rgba(33, 150, 243, 0.34)'
+        }
+    },
+    code: {
+        marginTop: 16,
     }
 }))
 
@@ -171,6 +191,10 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
         return data.weekData?.map(item => ({date: Week[item.day], cnt: item.cnt}))
     }, [data.weekData])
 
+    const handleProfileCopy = (event: React.MouseEvent<HTMLButtonElement>) => {
+        navigator.clipboard.writeText('<iframe src="' + window.location.href + 'widjet/' + userData?.id + '" width="193" height="280"></iframe>')
+    }
+
     return (
         <div className={classes.root}>
             <div className={classes.left}>
@@ -180,7 +204,7 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
                             <img src={avatars} alt="avatar"/>
                         </div>
                         <Typography>{data.ratesData?.length || '-'}</Typography>
-                        <Typography className={classes.notificationsTitle}>Оценивших</Typography>
+                        <Typography className={classes.notificationsTitle}>Оценок</Typography>
                     </div>
                     <div className={classes.notifications}>
                         <div>
@@ -199,7 +223,7 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
                 <div className={classes.myGrade}>
                     <Typography className={classes.statisticsTitle}>Моя оценка (средняя)</Typography>
                     <ShowRating
-                        value={userData?.over_score || 0}
+                        value={+(userData?.over_score.toFixed(2) || 0)}
                     />
                 </div>
                 <div className={classes.gradeChart}>
@@ -226,6 +250,17 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
                             :
                             <Typography className={classes.statisticsTitle}>Оценок еще нет</Typography>
                     }
+                </div>
+                <div className={classes.myWidjet}>
+                    <Typography className={classes.statisticsTitle}>Код для встраивания виджета</Typography>
+                    <Typography className={classes.code}>{'<iframe src="' + window.location.href + 'widjet/' + userData?.id + '" width="193" height="280"></iframe>'}</Typography>
+                    <Button
+                                    className={classes.photoBtn}
+                                    onClick={handleProfileCopy}
+                                    disableRipple
+                                >
+                                    Копировать код виджета
+                                </Button>
                 </div>
             </div>
             <div className={classes.right}>

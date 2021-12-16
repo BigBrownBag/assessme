@@ -148,7 +148,7 @@ export const RegistrationPage: React.FC<RegistrationProps> = (props: Registratio
                             className={classes.btn}
                             type="submit"
                         >
-                            Зарегестрироваться
+                            Зарегистрироваться
                         </CustomButton>
                     </form>
                 </Box>

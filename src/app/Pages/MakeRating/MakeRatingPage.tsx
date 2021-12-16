@@ -112,40 +112,7 @@ const MakeRatingPage: React.FC<any> = () => {
                                 </div>
                                 <ShowRating
                                     className={classes.currentRating}
-                                    value={+(data?.over_score || 0)}
-                                />
-                                <Autocomplete
-                                    disabled
-                                    id="combo-box"
-                                    style={{width: 400}}
-                                    options={options}
-                                    open={open}
-                                    onOpen={() => {
-                                        setOpen(true);
-                                    }}
-                                    onClose={() => {
-                                        setOpen(false);
-                                    }}
-                                    noOptionsText='Нет доступных вариантов'
-                                    onChange={(event, option) => setCurrentSubject(option)}
-                                    getOptionLabel={(option) => option.title}
-                                    getOptionSelected={(option, value) => option.title === value.title}
-                                    loading={pending}
-                                    renderInput={(params) =>
-                                        <CustomTextField
-                                            {...params}
-                                            label="Событие"
-                                            variant="standard"
-                                            required={true}
-                                            InputProps={{
-                                                ...params.InputProps,
-                                                endAdornment:
-                                                    <>
-                                                        {loading ? <CircularProgress color="inherit" size={20}/> : params.InputProps.endAdornment}
-                                                    </>
-                                            }}
-                                        />
-                                    }
+                                    value={+(data?.over_score.toFixed(2) || 0)}
                                 />
                                 <Typography className={clsx('pt-4', classes.secondaryText)}>Оценить</Typography>
                                 <Rating

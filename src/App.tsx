@@ -17,10 +17,11 @@ import WidjetPage from './app/Pages/Widjet';
 const App = () => {
     const [state, setState] = useState<{ username: string; password: string; }>({username: '', password: ''})
     const {isAuth, userData, onRegistration, onLogin, onLogout} = useAuth({...state})
-
+    
     return (
         <Switch>
-            <Route exact path="/">
+            <Route path="/widjet/:id" component={WidjetPage} />
+            <Route exact path="/*">
                 <LayoutPage isAuth={isAuth} userData={userData} onLogout={onLogout}>
                     <Switch>
                         {isAuth ?
@@ -44,7 +45,6 @@ const App = () => {
                     </Switch>
                 </LayoutPage>
             </Route>
-            <Route exact path="/widjet/:id" component={WidjetPage} />
         </Switch>
     )
 }

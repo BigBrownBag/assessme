@@ -66,6 +66,9 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             background: 'transparent'
         }
+    },
+    startIcon: {
+        marginRight: '0px !important'
     }
 }))
 
@@ -171,7 +174,7 @@ const Navbar: React.FC<NavbarProps> = (props: NavbarProps) => {
                                             :
                                             <Button
                                                 startIcon={
-                                                    <span className={clsx("material-icons", "pr-4", classes.icon)}>
+                                                    <span className={clsx("material-icons", "pr-4", classes.icon, classes.startIcon)}>
                                                         {item.icon}
                                                     </span>
                                                 }

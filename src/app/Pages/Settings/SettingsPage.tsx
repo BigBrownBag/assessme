@@ -74,6 +74,16 @@ const useStyles = makeStyles(theme => ({
             textTransform: 'capitalize'
         }
     },
+    fieldDescNoCap: {
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        fontSize: 16,
+        textAlign: 'start',
+        width: 300,
+        fontWeight: 500,
+        color: 'rgba(0, 0, 0, 0.87)'
+    },
     fieldList: {
         width: 300
     },
@@ -264,7 +274,15 @@ export const SettingsPage: React.FC<SettingsPageProps> = (props: SettingsPagePro
                                                     onChange={event => setForm({...form, [item.fieldProperty]: event.target.value})}
                                                 />
                                                 :
-                                                <Typography className={classes.fieldDesc}>{item.fieldProperty === 'org' ? data?.org?.title : data?.[item.fieldProperty as keyof User]}</Typography>
+                                                <>
+                                                    {item.fieldProperty === 'email' ?
+                                                        <Typography className={classes.fieldDescNoCap}>{data?.[item.fieldProperty as keyof User]}</Typography>
+                                                    :
+                                                    <>
+                                                        <Typography className={classes.fieldDesc}>{item.fieldProperty === 'org' ? data?.org?.title : data?.[item.fieldProperty as keyof User]}</Typography>
+                                                    </>
+                                                    }
+                                                </>
                                             }
                                         </ListItem>
                                     ))}
@@ -313,3 +331,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = (props: SettingsPagePro
 }
 
 export default SettingsPage;
+
+function str(str: any) {
+    throw new Error('Function not implemented.');
+}

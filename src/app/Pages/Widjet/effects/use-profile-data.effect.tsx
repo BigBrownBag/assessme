@@ -48,8 +48,7 @@ interface ProfileDataProps {
 
          DataRepository.get(
              `user/${params.id}`,
-             {},
-             getHeader()
+             {}
          )
              .then(res => {
                  const data = res.data
