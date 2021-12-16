@@ -177,12 +177,18 @@ enum Week {
     'Вс'
 }
 
+const org_status = new Map([
+    ['head', 'Руководитель'],
+    ['manager', 'Менеджер'],
+    ['employee', 'Сотрудник']
+]);
+      
+
 export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
     const classes = useStyles()
     const history = useHistory()
     const {userData} = props
     const {data, monthPending, weekPending} = useChartData({userId: userData?.id})
-
     const monthData = useMemo(() => {
         return data.monthData?.map(item => ({date: new Date(item.date).getDate(), score: item.score}))
     }, [data.monthData])
@@ -301,7 +307,7 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
                             </div>
                             <div className={classes.infoWrapp}>
                                 <Typography className={classes.infoName}>{`${item.rater.firstname} ${item.rater.surname}`}</Typography>
-                                <Typography className={classes.infoRole}>{item.rater.org_status}</Typography>
+                                <Typography className={classes.infoRole}>{org_status.get(item.rater.org_status)}</Typography>
                             </div>
                             <div className={classes.ratingWrapp}>
                                 <ShowRating
