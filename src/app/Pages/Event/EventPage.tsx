@@ -62,7 +62,7 @@ export const EventPage: React.FC<EventPageProps> = (props: EventPageProps) => {
     }
 
     const onEventCopy = (id: number) => {
-        navigator.clipboard.writeText(BASE_URL + `/rate/${id}`)
+        navigator.clipboard.writeText(window.location.href  + `rate/${id}`)
     }
 
     return (
