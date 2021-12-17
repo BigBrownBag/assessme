@@ -6,6 +6,7 @@ import confirmValue from "../../../utils/confirmValue";
 import {Form, User} from "../../../utils/interface";
 import {useProfileData} from "../Profile/effects/use-profile-data.effect";
 import Spinner from "../../components/Spinner";
+import {orgStatus} from "../../../utils/dictOrgStatus";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -279,7 +280,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = (props: SettingsPagePro
                                                         <Typography className={classes.fieldDescNoCap}>{data?.[item.fieldProperty as keyof User]}</Typography>
                                                     :
                                                     <>
-                                                        <Typography className={classes.fieldDesc}>{item.fieldProperty === 'org' ? data?.org?.title : data?.[item.fieldProperty as keyof User]}</Typography>
+                                                        <Typography className={classes.fieldDesc}>{item.fieldProperty === 'org' ? data?.org?.title : item.fieldProperty === 'org_status' ? orgStatus.get(data?.[item.fieldProperty as keyof User] as string) : data?.[item.fieldProperty as keyof User]}</Typography>
                                                     </>
                                                     }
                                                 </>

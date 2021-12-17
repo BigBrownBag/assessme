@@ -15,14 +15,17 @@ import {
 import {useChartData} from "./effects/use-chart-data.effect";
 import Spinner from "../../components/Spinner";
 import {User} from "../../../utils/interface";
+import {orgStatus} from "../../../utils/dictOrgStatus";
 import {BASE_URL} from "../../../api/DataRepository";
+import { ValueScale } from '@devexpress/dx-react-chart';
 
 const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
         justifyContent: 'space-between',
         padding: 32,
-        height: '100%'
+        height: '100%',
+        paddingBottom: 60
     },
     left: {
         height: '100%',
@@ -56,6 +59,9 @@ const useStyles = makeStyles(theme => ({
         fontSize: 14,
         maxWidth: 108,
         textAlign: "center",
+        marginTop: 8
+    },
+    notificationsValue: {
         marginTop: 8
     },
     widjets: {
@@ -190,11 +196,12 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
     const {userData} = props
     const {data, monthPending, weekPending} = useChartData({userId: userData?.id})
     const monthData = useMemo(() => {
-        return data.monthData?.map(item => ({date: new Date(item.date).getDate(), score: item.score}))
+        console.log(data.monthData?.sort((a, b) => (a.date > b.date && a.score > b.score) ? 1 : -1).map(item => ({date: new Date(item.date).getDate(), score: item.score})))
+        return data.monthData?.sort((a, b) => (a.date > b.date && a.score > b.score) ? 1 : -1).map(item => ({date: new Date(item.date).getDate(), score: item.score}))
     }, [data.monthData])
 
     const weekData = useMemo(() => {
-        return data.weekData?.map(item => ({date: Week[item.day], cnt: item.cnt}))
+        return data.weekData?.sort((a, b) => (a.cnt > b.cnt) ? 1 : -1).map(item => ({date: Week[item.day-1], cnt: item.cnt}))
     }, [data.weekData])
 
     const handleProfileCopy = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -209,14 +216,14 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
                         <div>
                             <img src={avatars} alt="avatar"/>
                         </div>
-                        <Typography>{data.ratesData?.length || '-'}</Typography>
+                        <Typography className={classes.notificationsValue}>{data.ratesData?.length || '-'}</Typography>
                         <Typography className={classes.notificationsTitle}>Оценок</Typography>
                     </div>
                     <div className={classes.notifications}>
                         <div>
                             <img src={notif} alt="notif"/>
                         </div>
-                        <Typography>-</Typography>
+                        <Typography className={classes.notificationsValue}>-</Typography>
                         <Typography className={classes.notificationsTitle}>Уведомления</Typography>
                     </div>
                     <div className={classes.notifications}>
@@ -283,10 +290,13 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
                                 data={weekData}
                                 height={166}
                             >
+                                <ValueScale name="cnt" />
                                 <ArgumentAxis />
+                                <ValueAxis scaleName="cnt" showGrid={true} showLine showTicks />
                                 <BarSeries
                                     valueField="cnt"
                                     argumentField="date"
+                                    scaleName="cnt"
                                 />
                             </Chart>
                             :
@@ -307,7 +317,7 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
                             </div>
                             <div className={classes.infoWrapp}>
                                 <Typography className={classes.infoName}>{`${item.rater.firstname} ${item.rater.surname}`}</Typography>
-                                <Typography className={classes.infoRole}>{org_status.get(item.rater.org_status)}</Typography>
+                                <Typography className={classes.infoRole}>{orgStatus.get(item.rater.org_status)}</Typography>
                             </div>
                             <div className={classes.ratingWrapp}>
                                 <ShowRating

@@ -8,6 +8,7 @@ import ShowRating from "../../components/ShowRating";
 import {useProfileData} from "./effects/use-profile-data.effect";
 import {User} from "../../../utils/interface";
 import Spinner from "../../components/Spinner";
+import {orgStatus} from "../../../utils/dictOrgStatus";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -154,7 +155,7 @@ const ProfilePage: React.FC<any> = (props) => {
                                     {fields.map((item, idx) => (
                                         <ListItem className={classes.field} key={idx}>
                                             <Typography className={classes.filedTitle}>{item.field}</Typography>
-                                            <Typography className={classes.fieldDesc}>{data?.[item.fieldProperty as keyof User]}</Typography>
+                                            <Typography className={classes.fieldDesc}>{item.fieldProperty === 'org_status' ? orgStatus.get(data?.[item.fieldProperty as keyof User] as string) : data?.[item.fieldProperty as keyof User]}</Typography>
                                         </ListItem>
                                     ))}
                                 </List>

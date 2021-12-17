@@ -16,7 +16,7 @@ export interface ChartData {
 
 export interface WeekData {
     day: number;
-    cnt: string;
+    cnt: number;
 }
 
 export interface RatesData {

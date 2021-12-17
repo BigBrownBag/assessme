@@ -8,6 +8,7 @@ import {useHistory} from "react-router-dom";
 import {useSearchData} from "./effects/use-search-data.effect";
 import {User} from "../../../utils/interface";
 import Spinner from "../../components/Spinner";
+import {orgStatus} from "../../../utils/dictOrgStatus";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -170,7 +171,7 @@ const SearchPage: React.FC<any> = () => {
                                     </div>
                                     <div className={classes.infoWrapp}>
                                         <Typography className={classes.infoName}>{`${item.firstname} ${item.surname}`}</Typography>
-                                        <Typography className={classes.infoRole}>{item.org_status}</Typography>
+                                        <Typography className={classes.infoRole}>{orgStatus.get(item.org_status)}</Typography>
                                     </div>
                                     <div className={classes.ratingWrapp}>
                                         <ShowRating
