@@ -155,7 +155,7 @@ const useStyles = makeStyles(theme => ({
         borderRadius: 32,
         padding: 24,
         marginTop: 64,
-        height: 150
+        height: 180
     },
     photoBtn: {
         marginTop: 16,
