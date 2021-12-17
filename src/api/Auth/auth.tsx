@@ -10,7 +10,7 @@ export interface AuthParams {
 
 interface Auth {
     isAuth: boolean;
-    error: boolean;
+    error: string |  null;
     userData: User | null;
     onLogout: () => void;
     onLogin: (params: AuthParams) => void;
@@ -42,7 +42,7 @@ export default function getHeader() {
 export const useAuth = (params: AuthParams): Auth => {
     const [isAuth, setIsAuth] = useState<boolean>(false)
     const [userData, setUserData] = useState<User | null>(null)
-    const [error, setError] = useState<boolean>(false)
+    const [error, setError] = useState<string | null>(null)
     const history = useHistory()
     const userSettings: any = localStorage.getItem(USER_DATA)
 
@@ -60,8 +60,8 @@ export const useAuth = (params: AuthParams): Auth => {
                     const data = res.data
                     setIsAuth(true)
                     setUserData(data)
+                    console.log(history)
                 })
-                .catch(err => setError(true))
         }
     }, [isAuth])
 
@@ -76,6 +76,7 @@ export const useAuth = (params: AuthParams): Auth => {
                 }
                 setIsAuth(true)
             })
+            .catch(err => setError(err.message))
     }, [])
 
     const onLogout= () => {

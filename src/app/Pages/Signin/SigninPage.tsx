@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Box, Button, Container, makeStyles} from "@material-ui/core";
+import {Box, Button, Container, makeStyles, Typography} from "@material-ui/core";
 import CustomTextField from "../../components/CustomTextField";
 import CustomButton from "../../components/CustomButton";
 import {useHistory} from "react-router-dom";
@@ -49,6 +49,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export interface LoginPageProps {
+    error: string | null;
     state: { username: string; password: string; };
     onLogin: (params: AuthParams) => void;
     onChange: (value: { username: string; password: string; }) => void;
@@ -87,6 +88,8 @@ const LoginPage: React.FC<LoginPageProps> = (props: LoginPageProps) => {
                             Assessme
                         </div>
                     </div>
+
+                    {props.error && <Typography>Неправильное имя ползователя или пароль</Typography>}
 
                     <form onSubmit={handleSubmit} className={classes.form}>
                         <CustomTextField

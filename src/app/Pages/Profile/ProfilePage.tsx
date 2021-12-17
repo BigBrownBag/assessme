@@ -173,7 +173,7 @@ const ProfilePage: React.FC<any> = (props) => {
                             Назад
                         </CustomButton>
                         <CustomButton
-                            onClick={(event) => history.push(`/rate`)}
+                            onClick={(event) => history.push(`/rate/${params['userId']}`)}
                         >
                             Оценить
                         </CustomButton>

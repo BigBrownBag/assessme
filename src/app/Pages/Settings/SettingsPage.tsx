@@ -269,7 +269,7 @@ export const SettingsPage: React.FC<SettingsPageProps> = (props: SettingsPagePro
                                                     }
                                                     helperText={confirmValue(form[item.fieldProperty]!, item.type!) ? 'Empty field!' : ' '} //TODO
                                                     type={item.type}
-                                                    disabled={item.type === 'password' || item.fieldProperty === 'org_status'}                                                     // TODO
+                                                    disabled={item.type === 'password' || item.fieldProperty === 'org_title'}                                                     // TODO
                                                     placeholder={item.fieldProperty === 'org' ? data?.org?.title : (data?.[item.fieldProperty as keyof User]?.toString() || '')}
                                                     value={form[item.fieldProperty]}
                                                     onChange={event => setForm({...form, [item.fieldProperty]: event.target.value})}

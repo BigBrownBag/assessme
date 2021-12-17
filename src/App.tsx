@@ -16,36 +16,115 @@ import WidjetPage from './app/Pages/Widjet';
 
 const App = () => {
     const [state, setState] = useState<{ username: string; password: string; }>({username: '', password: ''})
-    const {isAuth, userData, onRegistration, onLogin, onLogout} = useAuth({...state})
-    
+    const {isAuth, userData, onRegistration, onLogin, onLogout, error} = useAuth({...state})
+
     return (
-        <Switch>
-            <Route path="/widjet/:id" component={WidjetPage} />
-            <Route exact path="/*">
-                <LayoutPage isAuth={isAuth} userData={userData} onLogout={onLogout}>
-                    <Switch>
-                        {isAuth ?
-                            <>
-                                <Route exact path="/" component={() => <MainPage userData={userData} />} />
-                                <Route exact path="/search" component={SearchPage} />
-                                <Route exact path="/settings" component={() => <SettingsPage userData={userData} />} />
-                                <Route exact path="/profile/:userId" component={ProfilePage} />
-                                <Route exact path={["/rate", "/rate/:userId"]} component={() => <MakeRatingPage userId={userData?.id}/>} />
-                                <Route exact path="/event" component={() => <EventPage userId={userData?.id}/>} />
-                                <Route exact path="/organization" component={OrganizationPage} />
-                                <Redirect from="*" to="/" />
-                            </>
+        <LayoutPage isAuth={isAuth} userData={userData} onLogout={onLogout}>
+            <Switch>
+                <Route
+                    exact
+                    path="/"
+                    component={
+                        isAuth ?
+                        () => <MainPage userData={userData}/>
+                        :
+                        () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
+                    }
+                />
+                <Route
+                    exact
+                    path="/search"
+                    component={
+                        isAuth ?
+                            () => <SearchPage/>
                             :
-                            <>
-                                <Route exact path="/forget" component={() => <ForgetPage />} />
-                                <Route exact path="/registration" component={() => <Registration onRegistration={onRegistration} />} />
-                                <Route exact path="/login" component={() => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} />} />
-                                <Redirect from="*" to="/login" />
-                            </>}
-                    </Switch>
-                </LayoutPage>
-            </Route>
-        </Switch>
+                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
+                    }
+                />
+                <Route
+                    exact
+                    path="/settings"
+                    component={
+                        isAuth ?
+                            () => <SettingsPage userData={userData}/>
+                            :
+                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
+                    }
+                />
+                <Route
+                    exact
+                    path="/profile/:userId"
+                    component={
+                        isAuth ?
+                            () => <ProfilePage/>
+                            :
+                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
+                    }
+                />
+                <Route
+                    exact
+                    path={["/rate/:userId", "/rate/:userId/:eventId"]}
+                    component={
+                        isAuth ?
+                            () => <MakeRatingPage userId={userData?.id}/>
+                            :
+                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
+                    }
+                />
+                <Route
+                    exact
+                    path="/event"
+                    component={
+                        isAuth ?
+                            () => <EventPage userId={userData?.id}/>
+                            :
+                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
+                    }
+                />
+                <Route
+                    exact
+                    path="/organization"
+                    component={
+                        isAuth ?
+                            OrganizationPage
+                            :
+                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
+                    }
+                />
+                <Route
+                    exact
+                    path="/forget"
+                    component={
+                        !isAuth ?
+                            () => <ForgetPage />
+                            :
+                            () => <MainPage userData={userData}/>
+                    }
+                />
+                <Route
+                    exact
+                    path="/registration"
+                    component={
+                        !isAuth ?
+                            () => <Registration onRegistration={onRegistration}/>
+                            :
+                            () => <MainPage userData={userData}/>
+                    }
+                />
+                <Route
+                    exact
+                    path="/login"
+                    component={
+                        !isAuth ?
+                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
+                            :
+                            () => <MainPage userData={userData}/>
+                    }
+                />
+                <Route path="/widjet/:id" component={WidjetPage} />
+                <Redirect from="*" to="/" />
+            </Switch>
+        </LayoutPage>
     )
 }
 

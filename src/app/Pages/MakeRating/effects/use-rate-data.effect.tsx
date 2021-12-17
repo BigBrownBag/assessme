@@ -47,6 +47,7 @@ export const useRateData = (params: RateDataParams): RateData => {
     }, [params.userId, syncTime])
 
     const onMakeRate = useCallback((score: number, id: number) => {
+        console.log(params.eventId)
         const data = params.eventId ?
             {
                 assessed_id: id,
