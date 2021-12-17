@@ -40,3 +40,13 @@ export interface User {
     username: string;
     notification: number;
 }
+
+export interface Event {
+    create_date: string;
+    date: string;
+    factor: number;
+    id: number;
+    over_score: number;
+    scores_count: number;
+    title: string;
+}

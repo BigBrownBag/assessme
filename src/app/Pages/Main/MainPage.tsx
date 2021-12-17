@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
         justifyContent: 'space-between',
-        padding: 32,
+        padding: '32px 32px 77px',
         height: '100%'
     },
     left: {
@@ -210,7 +210,7 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
                             thickness={3}
                         />
                         :
-                        data.monthData ?
+                        data.monthData?.length ?
                             <Chart
                                 data={monthData}
                                 height={300}
@@ -237,7 +237,7 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
                             thickness={3}
                         />
                         :
-                        data.weekData ?
+                        data.weekData?.length ?
                             <Chart
                                 data={weekData}
                                 height={166}
@@ -254,7 +254,7 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
                 </div> 
                 <List className={classes.rowList}>
                     <Typography className={classes.statisticsTitle}>Последние оценки</Typography>
-                    {data.ratesData ?
+                    {data.ratesData?.length ?
                         data.ratesData?.map((item, idx) => (
                         <ListItem
                             className={classes.rowData}

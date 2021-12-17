@@ -15,6 +15,7 @@ interface Auth {
     onLogout: () => void;
     onLogin: (params: AuthParams) => void;
     onRegistration: (body: RegistrationForm) => void;
+    onPasswordForget: (email: string) => void;
 }
 
 export interface RegistrationForm {
@@ -62,7 +63,7 @@ export const useAuth = (params: AuthParams): Auth => {
                 })
                 .catch(err => setError(true))
         }
-    }, [])
+    }, [isAuth])
 
     const onLogin = useCallback((body: AuthParams) => {
         DataRepository.post(
@@ -89,12 +90,18 @@ export const useAuth = (params: AuthParams): Auth => {
             {
                 surname: body.surname,
                 firstname: body.firstname,
+                middlename: '',
                 email: body.email,
                 username: body.username,
                 password: body.password
             }
         )
-            .then(res => console.log(res))
+            .then(res => {
+                if (res.data) {
+                    localStorage.setItem(USER_DATA, JSON.stringify(res.data))
+                }
+                setIsAuth(true)
+            })
     }, [])
 
     const onPasswordForget = useCallback((email: string) => {
@@ -107,6 +114,7 @@ export const useAuth = (params: AuthParams): Auth => {
         error,
         onLogout,
         onLogin,
-        onRegistration
+        onRegistration,
+        onPasswordForget
     }
 }

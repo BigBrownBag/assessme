@@ -1,6 +1,6 @@
 import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
 
-export const BASE_URL: string = 'localhost:3000'
+export const BASE_URL: string = 'localhost:3000/#'
 const root = 'https://api.assessme.paulislava.space'
 
 class DataRepository {
