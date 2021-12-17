@@ -1,12 +1,7 @@
 import React, {useEffect, useState}  from 'react';
 import {makeStyles, Modal, TableCell, TableHead, Typography, IconButton, Table, TableBody, TableRow} from "@material-ui/core";
 import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import CustomButton from "../../components/CustomButton";
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -15,7 +10,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import DownloadIcon from '@mui/icons-material/Download';
 import CopyAllIcon from '@mui/icons-material/CopyAll';
-import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import {useSearchData} from "./effects/use-search-data.effect";
@@ -69,30 +63,17 @@ const columns = [
 
 export const EventPage: React.FC<EventPageProps> = (props: EventPageProps) => {
     const classes = useStyles()
-    const [open, setOpen] = React.useState(false);
-    const [edit, setEdit] = React.useState(false);
-    const [state, setState] = useState<Event[]>([])
     const [createOpen, setCreateOpen] = React.useState(false);
     const [editOpen, setEditOpen] = React.useState(false);
     const {data, loading, onAddEvent, onExportEvent} = useEventData({userId: props.userId})
-
-    useEffect(() => {
-        setState(data)
-    }, [data])
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
 
     const onCreateClose = () => {
         setCreateOpen(false)
     }
 
     const onEditClose = () => {
-        
-    const handleCloseEdit = () => {
-        setEdit(false);
-    };
+        setEditOpen(false)
+    }
 
     const onEventCopy = (id: number) => {
         navigator.clipboard.writeText(BASE_URL + `/rate/${id}`)
