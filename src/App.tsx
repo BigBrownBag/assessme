@@ -19,112 +19,116 @@ const App = () => {
     const {isAuth, userData, onRegistration, onLogin, onLogout, error} = useAuth({...state})
 
     return (
-        <LayoutPage isAuth={isAuth} userData={userData} onLogout={onLogout}>
-            <Switch>
-                <Route
-                    exact
-                    path="/"
-                    component={
-                        isAuth ?
-                        () => <MainPage userData={userData}/>
-                        :
-                        () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
-                    }
-                />
-                <Route
-                    exact
-                    path="/search"
-                    component={
-                        isAuth ?
-                            () => <SearchPage/>
-                            :
-                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
-                    }
-                />
-                <Route
-                    exact
-                    path="/settings"
-                    component={
-                        isAuth ?
-                            () => <SettingsPage userData={userData}/>
-                            :
-                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
-                    }
-                />
-                <Route
-                    exact
-                    path="/profile/:userId"
-                    component={
-                        isAuth ?
-                            () => <ProfilePage/>
-                            :
-                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
-                    }
-                />
-                <Route
-                    exact
-                    path={["/rate/:userId", "/rate/:userId/:eventId"]}
-                    component={
-                        isAuth ?
-                            () => <MakeRatingPage userId={userData?.id}/>
-                            :
-                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
-                    }
-                />
-                <Route
-                    exact
-                    path="/event"
-                    component={
-                        isAuth ?
-                            () => <EventPage userId={userData?.id}/>
-                            :
-                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
-                    }
-                />
-                <Route
-                    exact
-                    path="/organization"
-                    component={
-                        isAuth ?
-                            OrganizationPage
-                            :
-                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
-                    }
-                />
-                <Route
-                    exact
-                    path="/forget"
-                    component={
-                        !isAuth ?
-                            () => <ForgetPage />
-                            :
+        <Switch>
+        <Route path="/widjet/:id" component={WidjetPage} />
+            <Route exact path="/*" component={WidjetPage}>
+            <LayoutPage isAuth={isAuth} userData={userData} onLogout={onLogout}>
+                <Switch>
+                    <Route
+                        exact
+                        path="/"
+                        component={
+                            isAuth ?
                             () => <MainPage userData={userData}/>
-                    }
-                />
-                <Route
-                    exact
-                    path="/registration"
-                    component={
-                        !isAuth ?
-                            () => <Registration onRegistration={onRegistration}/>
                             :
-                            () => <MainPage userData={userData}/>
-                    }
-                />
-                <Route
-                    exact
-                    path="/login"
-                    component={
-                        !isAuth ?
                             () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
-                            :
-                            () => <MainPage userData={userData}/>
-                    }
-                />
-                <Route path="/widjet/:id" component={WidjetPage} />
-                <Redirect from="*" to="/" />
-            </Switch>
-        </LayoutPage>
+                        }
+                    />
+                    <Route
+                        exact
+                        path="/search"
+                        component={
+                            isAuth ?
+                                () => <SearchPage/>
+                                :
+                                () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
+                        }
+                    />
+                    <Route
+                        exact
+                        path="/settings"
+                        component={
+                            isAuth ?
+                                () => <SettingsPage userData={userData}/>
+                                :
+                                () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
+                        }
+                    />
+                    <Route
+                        exact
+                        path="/profile/:userId"
+                        component={
+                            isAuth ?
+                                () => <ProfilePage/>
+                                :
+                                () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
+                        }
+                    />
+                    <Route
+                        exact
+                        path={["/rate/:userId", "/rate/:userId/:eventId"]}
+                        component={
+                            isAuth ?
+                                () => <MakeRatingPage userId={userData?.id}/>
+                                :
+                                () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
+                        }
+                    />
+                    <Route
+                        exact
+                        path="/event"
+                        component={
+                            isAuth ?
+                                () => <EventPage userId={userData?.id}/>
+                                :
+                                () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
+                        }
+                    />
+                    <Route
+                        exact
+                        path="/organization"
+                        component={
+                            isAuth ?
+                                OrganizationPage
+                                :
+                                () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
+                        }
+                    />
+                    <Route
+                        exact
+                        path="/forget"
+                        component={
+                            !isAuth ?
+                                () => <ForgetPage />
+                                :
+                                () => <MainPage userData={userData}/>
+                        }
+                    />
+                    <Route
+                        exact
+                        path="/registration"
+                        component={
+                            !isAuth ?
+                                () => <Registration onRegistration={onRegistration}/>
+                                :
+                                () => <MainPage userData={userData}/>
+                        }
+                    />
+                    <Route
+                        exact
+                        path="/login"
+                        component={
+                            !isAuth ?
+                                () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
+                                :
+                                () => <MainPage userData={userData}/>
+                        }
+                    />
+                    <Redirect from="*" to="/" />
+                </Switch>
+            </LayoutPage>
+            </Route>
+        </Switch>
     )
 }
 
