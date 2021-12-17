@@ -30,7 +30,7 @@ const App = () => {
                                 <Route exact path="/search" component={SearchPage} />
                                 <Route exact path="/settings" component={() => <SettingsPage userData={userData} />} />
                                 <Route exact path="/profile/:userId" component={ProfilePage} />
-                                <Route exact path="/rate/:userId" component={MakeRatingPage} />
+                                <Route exact path={["/rate", "/rate/:userId"]} component={MakeRatingPage} />
                                 <Route exact path="/event" component={EventPage} />
                                 <Route exact path="/organization" component={OrganizationPage} />
                                 <Redirect from="*" to="/" />

@@ -1,5 +1,5 @@
 import React, {useEffect, useState}  from 'react';
-import {makeStyles} from "@material-ui/core";
+import {makeStyles, Modal, TableCell, TableHead, Typography, IconButton, Table, TableBody, TableRow} from "@material-ui/core";
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -21,18 +21,28 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import {useSearchData} from "./effects/use-search-data.effect";
 import {Event} from "../../../utils/interface";
 import dateFormat from 'dateformat';
+import GetAppIcon from '@material-ui/icons/GetApp';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import AddEvent from "./AddEvent";
+import {useEventData} from "./effects/use-event-data.effect";
+import Spinner from "../../components/Spinner";
+import {BASE_URL} from "../../../api/DataRepository";
 
-export interface EventPageProps {}
+export interface EventPageProps {
+    userId: number | undefined;
+}
 
 const useStyles = makeStyles(theme => ({
     root: {
-        paddingTop: '100px',
-        paddingLeft: '20px',
-        paddingRight: '20px',
-        height: '100%',
+        padding: '100px 32px',
+        height: '100%'
     },
     paper: {
         boxShadow: 'none !important',
+        display: 'flex',
+        justifyContent: 'center'
+
     },
     tableCell: {
         fontSize: '16px !important',
@@ -43,6 +53,9 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'right',
         padding: '20px'
     },
+    text: {
+
+    }
 }))
 
 const columns = [
@@ -59,7 +72,9 @@ export const EventPage: React.FC<EventPageProps> = (props: EventPageProps) => {
     const [open, setOpen] = React.useState(false);
     const [edit, setEdit] = React.useState(false);
     const [state, setState] = useState<Event[]>([])
-    const {data, error, loading} = useSearchData()
+    const [createOpen, setCreateOpen] = React.useState(false);
+    const [editOpen, setEditOpen] = React.useState(false);
+    const {data, loading, onAddEvent, onExportEvent} = useEventData({userId: props.userId})
 
     useEffect(() => {
         setState(data)
@@ -69,129 +84,115 @@ export const EventPage: React.FC<EventPageProps> = (props: EventPageProps) => {
         setOpen(true);
     };
 
-    const handleClose = () => {
-        setOpen(false);
-    };
+    const onCreateClose = () => {
+        setCreateOpen(false)
+    }
 
-    const handleClickEdit = () => {
-        setEdit(true);
-    };
-
+    const onEditClose = () => {
+        
     const handleCloseEdit = () => {
         setEdit(false);
     };
+
+    const onEventCopy = (id: number) => {
+        navigator.clipboard.writeText(BASE_URL + `/rate/${id}`)
+    }
+
     console.log(data)
     return (
         <div className={classes.root}>
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Добавить событие</DialogTitle>
-                <DialogContent>
-                <TextField
-                    autoFocus
-                    margin="dense"
-                    id="title"
-                    label="Название события"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                />
-                <TextField
-                    autoFocus
-                    margin="dense"
-                    id="date"
-                    label="Дата"
-                    type="date"
-                    fullWidth
-                    variant="standard"
-                />
-                </DialogContent>
-                <DialogActions>
-                <CustomButton onClick={handleClose}>Отменить</CustomButton>
-                <CustomButton onClick={handleClose}>Добавить</CustomButton>
-                </DialogActions>
-            </Dialog>
-
-            <Dialog open={edit} onClose={handleCloseEdit}>
-                <DialogTitle>Редактировать событие</DialogTitle>
-                <DialogContent>
-                <TextField
-                    autoFocus
-                    margin="dense"
-                    id="title"
-                    label="Название события"
-                    type="text"
-                    value="hello"
-                    fullWidth
-                    variant="standard"
-                />
-                <TextField
-                    autoFocus
-                    margin="dense"
-                    id="date"
-                    label="Дата"
-                    type="date"
-                    value="2020-01-01"
-                    fullWidth
-                    variant="standard"
-                />
-                </DialogContent>
-                <DialogActions>
-                <CustomButton onClick={handleCloseEdit}>Отменить</CustomButton>
-                <CustomButton onClick={handleCloseEdit}>Добавить</CustomButton>
-                </DialogActions>
-            </Dialog>
-
-            <Paper className={classes.paper} sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer sx={{ maxHeight: 450 }}>
-                <Table stickyHeader aria-label="sticky table">
-                <TableHead>
-                    <TableRow>
-                    {columns.map((column) => (
-                        <TableCell
-                        className={classes.tableCell} 
-                        key={column.id}
-                        align={'center'}
-                        style={{ minWidth: column.minWidth }}
-                        >
-                        {column.label}
-                        </TableCell>
-                    ))}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {data.map((row) => (
-                        <TableRow key={row.title}>
-                            <TableCell className={classes.tableCell} align="center">{row.title}</TableCell>
-                            <TableCell className={classes.tableCell} align="center">{dateFormat(row.date, "yyyy-mm-dd")}</TableCell>
-                            <TableCell className={classes.tableCell} align="center">{row.over_score}</TableCell>
-                            <TableCell className={classes.tableCell} align="center">{row.scores_count}</TableCell>
-                            <TableCell className={classes.tableCell} align="center">
-                                <IconButton aria-label="download">
-                                    <DownloadIcon/>
-                                </IconButton>
-                                <IconButton aria-label="copy">
-                                    <CopyAllIcon/>
-                                </IconButton>
-                                <IconButton aria-label="edit" onClick={handleClickEdit}>
-                                    <EditIcon/>
-                                </IconButton>
-                                <IconButton aria-label="delete">
-                                    <DeleteIcon/>
-                                </IconButton>
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-                </Table>
-            </TableContainer>
-            </Paper>
             <div className={classes.btn}>
-                <CustomButton onClick={handleClickOpen}>
-                 Добавить событие
+                <CustomButton
+                    onClick={() => {
+                        setCreateOpen(true);
+                    }}
+                >
+                    + Добавить событие
                 </CustomButton>
             </div>
+            <div className={classes.paper}>
+                {loading ?
+                    <Spinner
+                        size={300}
+                    />
+                    :
+                    data?.length ?
+                    <Table aria-label="sticky table">
+                        <TableHead>
+                            <TableRow>
+                                {columns.map((column) => (
+                                    <TableCell
+                                        className={classes.tableCell}
+                                        key={column.id}
+                                        align="center"
+                                        style={{minWidth: column.minWidth}}
+                                    >
+                                        {column.label}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {data?.map((row, idx) => (
+                                <TableRow key={idx}>
+                                    <TableCell className={classes.tableCell} align="center">{row.title}</TableCell>
+                                    <TableCell className={classes.tableCell} align="center">{row.date.slice(0, 10)}</TableCell>
+                                    <TableCell className={classes.tableCell} align="center">{row.over_score}</TableCell>
+                                    <TableCell className={classes.tableCell} align="center">
+                                        <IconButton
+                                            disableRipple
+                                            onClick={(e) => onExportEvent(row.id)}
+                                        >
+                                            <GetAppIcon/>
+                                        </IconButton>
+                                        <IconButton
+                                            disableRipple
+                                            onClick={(e) => onEventCopy(row.id)}
+                                        >
+                                            <FileCopyIcon/>
+                                        </IconButton>
+                                        <IconButton
+                                            disableRipple
+                                            onClick={(e) => setEditOpen(true)}
+                                        >
+                                            <EditIcon/>
+                                        </IconButton>
+                                        <IconButton
+                                            disableRipple
+                                        >
+                                            <DeleteOutlineIcon/>
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                        :
+                        <Typography variant="body1" className={classes.text}>У вас еще нет событий</Typography>
+                }
+            </div>
+            <Modal
+                open={createOpen}
+                onClose={onCreateClose}
+            >
+                <AddEvent
+                    add
+                    onAddEvent={onAddEvent}
+                    onClose={onCreateClose}
+                />
+            </Modal>
+
+            <Modal
+                open={editOpen}
+                onClose={onEditClose}
+            >
+                <AddEvent
+                    onAddEvent={onAddEvent}
+                    onClose={onEditClose}
+                />
+            </Modal>
         </div>
-    )
+    );
 }
 
 export default EventPage;

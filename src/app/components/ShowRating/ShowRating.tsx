@@ -39,7 +39,7 @@ const ShowRating: React.FC<ShowRatingProps> = (props: ShowRatingProps) => {
     return (
         <div className={clsx(classes.root, props.className)}>
             <Typography className={clsx(classes.value, {[classes.small]: props.size === "small"})}>
-                {props.value.toString().replace('.', ',')}
+                {props.value.toFixed(1).toString().replace('.', ',')}
             </Typography>
             <StarsIcon className={clsx(classes.icon, {[classes.small]: props.size === "small"})}/>
         </div>

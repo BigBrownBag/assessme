@@ -44,11 +44,11 @@ export interface User {
 }
 
 export interface Event {
-    id: number;
-    title: string;
-    date: Date;
-    create_date: Date;
+    create_date: string;
+    date: string;
     factor: number;
-    scores_count: number;
+    id: number;
     over_score: number;
+    scores_count: number;
+    title: string;
 }

@@ -5,7 +5,8 @@ import getHeader from "../../../../api/Auth/auth";
 import {User} from "../../../../utils/interface";
 
 interface RateDataParams {
-    userId: string;
+    userId: string | number | undefined;
+    eventId?: string | undefined;
 }
 
 export interface RateData {
@@ -46,12 +47,21 @@ export const useRateData = (params: RateDataParams): RateData => {
     }, [params.userId, syncTime])
 
     const onMakeRate = useCallback((score: number, id: number) => {
-        DataRepository.post(
-            'rate',
+        const data = params.eventId ?
             {
                 assessed_id: id,
                 score: score,
-                rater_id: +params.userId
+                event_id: +params.eventId
+            }
+            :
+            {
+                assessed_id: id,
+                score: score
+            }
+        DataRepository.post(
+            'rate',
+            {
+                ...data
             },
             getHeader()
         )
@@ -59,7 +69,7 @@ export const useRateData = (params: RateDataParams): RateData => {
                 setSyncTime(Date.now())
                 history.push(`/profile/${params.userId}`)
             })
-    }, [setSyncTime, history.push])
+    }, [setSyncTime, history.push, params.userId])
 
     return {
         data,
