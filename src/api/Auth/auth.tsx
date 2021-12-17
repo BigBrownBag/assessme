@@ -60,6 +60,7 @@ export const useAuth = (params: AuthParams): Auth => {
                     const data = res.data
                     setIsAuth(true)
                     setUserData(data)
+                    console.log(history)
                 })
                 .catch(err => setError(true))
         }
