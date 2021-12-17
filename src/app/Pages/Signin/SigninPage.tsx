@@ -122,13 +122,6 @@ const LoginPage: React.FC<LoginPageProps> = (props: LoginPageProps) => {
                     <Button
                         className={classes.secondaryBtn}
                         disableRipple
-                        onClick={() => history.push('/forget')}
-                    >
-                        Забыли пароль?
-                    </Button>
-                    <Button
-                        className={classes.secondaryBtn}
-                        disableRipple
                         onClick={() => history.push('/registration')}
                     >
                         Зарегистрироваться

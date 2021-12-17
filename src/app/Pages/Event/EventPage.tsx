@@ -52,6 +52,7 @@ export const EventPage: React.FC<EventPageProps> = (props: EventPageProps) => {
     const [editOpen, setEditOpen] = React.useState(false);
     const {data, loading, onAddEvent, onExportEvent} = useEventData({userId: props.userId})
 
+    console.log(props.userId)
     const onCreateClose = () => {
         setCreateOpen(false)
     }

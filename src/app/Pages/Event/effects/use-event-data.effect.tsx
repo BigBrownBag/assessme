@@ -20,7 +20,7 @@ export const useEventData = (params: EventDataParams): EventData => {
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<boolean>(false)
     const [syncTime, setSyncTime] = useState<number>()
-
+    
     useEffect(() => {
         if (!params.userId) {
             return;

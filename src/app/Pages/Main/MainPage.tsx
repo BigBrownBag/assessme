@@ -1,10 +1,11 @@
 import React, {useMemo} from 'react';
-import {Avatar, List, ListItem, makeStyles, Typography, Button,} from "@material-ui/core";
+import {Avatar, List, Modal, ListItem, makeStyles, Typography, Button,} from "@material-ui/core";
 import avatars from '../../../img/avatars.svg';
 import notif from '../../../img/notif.svg';
 import problem from '../../../img/problem.svg';
 import ShowRating from "../../components/ShowRating";
 import {useHistory} from "react-router-dom";
+import Notifications from "./Notifications";
 import {
   Chart,
   BarSeries,
@@ -192,6 +193,7 @@ const org_status = new Map([
 export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
     const classes = useStyles()
     const history = useHistory()
+    const [createOpen, setCreateOpen] = React.useState(false);
     const {userData} = props
     const {data, monthPending, weekPending} = useChartData({userId: userData?.id})
     const monthData = useMemo(() => {
@@ -207,6 +209,10 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
         navigator.clipboard.writeText('<iframe src="' + window.location.href + 'widjet/' + userData?.id + '" width="193" height="280"></iframe>')
     }
 
+    const onCreateClose = () => {
+        setCreateOpen(false)
+    }
+
     return (
         <div className={classes.root}>
             <div className={classes.left}>
@@ -218,7 +224,9 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
                         <Typography className={classes.notificationsValue}>{data.ratesData?.length || '-'}</Typography>
                         <Typography className={classes.notificationsTitle}>Оценок</Typography>
                     </div>
-                    <div className={classes.notifications}>
+                    <div className={classes.notifications} onClick={() => {
+                        setCreateOpen(true);
+                    }}>
                         <div>
                             <img src={notif} alt="notif"/>
                         </div>
@@ -330,6 +338,15 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
                     }
                     </List>
             </div>
+            <Modal
+                open={createOpen}
+                onClose={onCreateClose}
+            >
+                <Notifications
+                    add
+                    onClose={onCreateClose}
+                />
+            </Modal>
         </div>
     )
 }
