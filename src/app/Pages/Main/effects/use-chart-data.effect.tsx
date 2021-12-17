@@ -35,7 +35,7 @@ interface Data {
 }
 
 interface MonthData {
-    date: Date;
+    day: Date;
     score: number;
 }
 

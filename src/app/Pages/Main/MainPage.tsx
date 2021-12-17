@@ -196,8 +196,8 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
     const {userData} = props
     const {data, monthPending, weekPending} = useChartData({userId: userData?.id})
     const monthData = useMemo(() => {
-        console.log(data.monthData?.sort((a, b) => (a.date > b.date && a.score > b.score) ? 1 : -1).map(item => ({date: new Date(item.date).getDate(), score: item.score})))
-        return data.monthData?.sort((a, b) => (a.date > b.date && a.score > b.score) ? 1 : -1).map(item => ({date: new Date(item.date).getDate(), score: item.score}))
+        console.log(data.monthData?.sort((a, b) => (a.score > b.score) ? 1 : -1).map(item => ({day: new Date(item.day).getDate(), score: item.score})))
+        return data.monthData?.sort((a, b) => (a.score > b.score && a.day > b.day)  ? 1 : -1).map(item => ({day: new Date(item.day).getDate(), score: Math.floor(item.score)}))
     }, [data.monthData])
 
     const weekData = useMemo(() => {
@@ -257,7 +257,7 @@ export const MainPage: React.FC<MainPageProps> = (props: MainPageProps) => {
                                 <SplineSeries
                                     name="spline"
                                     valueField="score"
-                                    argumentField="date"
+                                    argumentField="day"
                                 />
                             </Chart>
                             :
