@@ -110,12 +110,12 @@ const links: Lnk[] = [
         to: '/event',
         admin: false
     },
-    {
-        title: 'Моя организация',
-        icon: 'home',
-        to: '/organization',
-        admin: true
-    },
+    // {
+    //     title: 'Моя организация',
+    //     icon: 'home',
+    //     to: '/organization',
+    //     admin: true
+    // },
     {
         title: 'Настройки',
         icon: 'settings',
