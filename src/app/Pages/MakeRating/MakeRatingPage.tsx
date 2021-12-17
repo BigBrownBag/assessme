@@ -86,10 +86,10 @@ interface MakeRatingProps {
 const MakeRatingPage: React.FC<any> = (props: MakeRatingProps) => {
     const classes = useStyles()
     const history = useHistory()
-    const {userId} = useParams() as any
+    const {userId, eventId} = useParams() as any
     const [valueRating, setValueRating] = useState<number | null>(0)
     const [currentSubject, setCurrentSubject] = useState<Subject | null>(null)
-    const {data, loading, onMakeRate} = useRateData({userId: props.userId, eventId: userId})
+    const {data, loading, onMakeRate} = useRateData({userId: userId, eventId: eventId})
     const {pending, options, open, setOpen} = useAutocomplete()
 
     const handleSend = (event: React.MouseEvent<HTMLButtonElement>) => {

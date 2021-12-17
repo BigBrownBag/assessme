@@ -105,6 +105,7 @@ export const EventPage: React.FC<EventPageProps> = (props: EventPageProps) => {
                                     <TableCell className={classes.tableCell} align="center">{row.over_score}</TableCell>
                                     <TableCell className={classes.tableCell} align="center">
                                         <IconButton
+                                            disabled
                                             disableRipple
                                             onClick={(e) => onExportEvent(row.id)}
                                         >
@@ -123,6 +124,7 @@ export const EventPage: React.FC<EventPageProps> = (props: EventPageProps) => {
                                             <EditIcon/>
                                         </IconButton>
                                         <IconButton
+                                            disabled
                                             disableRipple
                                         >
                                             <DeleteOutlineIcon/>

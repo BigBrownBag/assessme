@@ -15,7 +15,7 @@ import {useAuth} from "./api/Auth/auth";
 
 const App = () => {
     const [state, setState] = useState<{ username: string; password: string; }>({username: '', password: ''})
-    const {isAuth, userData, onRegistration, onLogin, onLogout} = useAuth({...state})
+    const {isAuth, userData, onRegistration, onLogin, onLogout, error} = useAuth({...state})
 
     return (
         <LayoutPage isAuth={isAuth} userData={userData} onLogout={onLogout}>
@@ -27,7 +27,7 @@ const App = () => {
                         isAuth ?
                         () => <MainPage userData={userData}/>
                         :
-                        () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin}/>
+                        () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
                     }
                 />
                 <Route
@@ -37,7 +37,7 @@ const App = () => {
                         isAuth ?
                             () => <SearchPage/>
                             :
-                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin}/>
+                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
                     }
                 />
                 <Route
@@ -47,7 +47,7 @@ const App = () => {
                         isAuth ?
                             () => <SettingsPage userData={userData}/>
                             :
-                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin}/>
+                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
                     }
                 />
                 <Route
@@ -57,17 +57,17 @@ const App = () => {
                         isAuth ?
                             () => <ProfilePage/>
                             :
-                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin}/>
+                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
                     }
                 />
                 <Route
                     exact
-                    path={["/rate", "/rate/:userId"]}
+                    path={["/rate/:userId", "/rate/:userId/:eventId"]}
                     component={
                         isAuth ?
                             () => <MakeRatingPage userId={userData?.id}/>
                             :
-                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin}/>
+                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
                     }
                 />
                 <Route
@@ -77,7 +77,7 @@ const App = () => {
                         isAuth ?
                             () => <EventPage userId={userData?.id}/>
                             :
-                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin}/>
+                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
                     }
                 />
                 <Route
@@ -87,7 +87,8 @@ const App = () => {
                         isAuth ?
                             OrganizationPage
                             :
-                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin}/>}
+                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
+                    }
                 />
                 <Route
                     exact
@@ -114,7 +115,7 @@ const App = () => {
                     path="/login"
                     component={
                         !isAuth ?
-                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin}/>
+                            () => <Login state={state} onChange={(value) => setState(value)} onLogin={onLogin} error={error}/>
                             :
                             () => <MainPage userData={userData}/>
                     }
