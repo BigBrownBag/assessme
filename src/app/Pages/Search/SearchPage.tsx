@@ -60,7 +60,9 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
         justifyContent: 'space-between',
         height: '100%',
-        padding: '16px 0'
+        padding: '16px 0',
+        marginRight: 'auto',
+        marginLeft: 20
     },
     ratingWrapp: {
         height: '100%',
